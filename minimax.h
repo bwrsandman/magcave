@@ -1,5 +1,5 @@
 /* Struct of tree of minimax search */
-typedef struct minimaxNode 
+struct minimaxNode 
 {
     const signed char value;                  /* Heuristic value or value for heuristic */
     struct minimaxNode* children;             /* Link to the first child */
@@ -8,7 +8,7 @@ typedef struct minimaxNode
 };
 
 const signed char heur(const minimaxNode* n);
-const signed char minimax(const minimaxNode* n, const char depth);
+const signed char minimax(const minimaxNode* n, const char depth, bool max=true);
 const char * const xmlfilename = "tree.xml";
 const minimaxNode* readxmltree(const char* const filename);
 const minimaxNode* readxmlnode(const xmlNode* const root,

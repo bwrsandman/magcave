@@ -2,6 +2,7 @@
 #include <algorithm>          /* For std::max */
 #include <iostream>           /* For cout and cin */
 #include <libxml/parser.h>
+#include <memory.h>
 #include "minimax.h"
 
 int main(int argc, char * argv[])
@@ -15,7 +16,7 @@ int main(int argc, char * argv[])
 
 /* Minimax function. */
 // TODO: Alpha beta pruning
-const signed char minimax(const minimaxNode* node, const char depth, bool max=True)
+const signed char minimax(const minimaxNode* node, const char depth, bool max)
 {
     /* Set alpha to -infinity, in this case, minimum CHAR value */
     signed char alpha = (max) ? SCHAR_MIN : SCHAR_MAX;

@@ -77,9 +77,9 @@ def read_xml_node(node):
 
 def main():
     root = read_xml_tree("tree.xml")
-    print minimax(root, 0)
-    print minimax(root, 1)
-    print minimax(root, 2)
+#    print minimax(root, 0)
+#    print minimax(root, 1)
+#    print minimax(root, 2)
     print minimax(root, 3)
 
 if __name__ == "__main__":
