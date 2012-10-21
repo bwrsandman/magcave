@@ -9,7 +9,7 @@ int main(int argc, char * argv[])
     /* Load minimax tree from xml file. */
     const minimaxNode* n = readxmltree(xmlfilename);
     /* Perform minimax, print result. */
-    std::cout << int(minimax(n, 7)) << std::endl;
+    std::cout << int(minimax(n, atoi(argv[1]))) << std::endl;
     return 0;
 }
 
@@ -48,6 +48,5 @@ const signed char minimax(const minimaxNode* node, const char depth, signed char
 const signed char heur(const minimaxNode* n)
 {
      /* At this point just retrieve value, optionally sleep. */
-     sleep(0.2);
      return (signed char) n->value;
 }
