@@ -8,7 +8,12 @@ struct minimaxNode
 };
 
 const signed char heur(const minimaxNode* n);
-const signed char minimax(const minimaxNode* n, const char depth, bool max=true);
+/* Set alpha to -infinity and beta to +infinity, in this case, 
+ * minimum and maximum CHAR values */
+const signed char minimax(const minimaxNode* n, const char depth, 
+                          signed char alpha=SCHAR_MIN, 
+                          signed char beta=SCHAR_MAX, 
+                          bool max=true);
 const char * const xmlfilename = "tree.xml";
 const minimaxNode* readxmltree(const char* const filename);
 const minimaxNode* readxmlnode(const xmlNode* const root,
