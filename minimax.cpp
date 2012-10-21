@@ -3,6 +3,7 @@
 #include <iostream>           /* For cout and cin */
 #include <libxml/parser.h>
 #include <memory.h>
+#include <unistd.h>           /* For sleep */
 #include "minimax.h"
 
 int main(int argc, char * argv[])
@@ -44,6 +45,7 @@ const signed char minimax(const minimaxNode* node, const char depth, bool max)
 const signed char heur(const minimaxNode* n)
 {
      /* At this point just retrieve value, optionally sleep. */
+     sleep(2);
      return (signed char) n->value;
 }
 
