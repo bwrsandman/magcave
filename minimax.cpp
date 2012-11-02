@@ -33,7 +33,7 @@ const signed char minimax(const minimaxNode* node, const char depth, signed char
 }
 
 /* Heuristic function */
-const signed char heur(const minimaxNode* n)
+inline const signed char heur(const minimaxNode* n)
 {
      /* At this point just retrieve value, optionally sleep. */
      return (signed char) n->value;
