@@ -5,14 +5,13 @@
 
 class GameWindow
 {
-    const WINDOW * const wnd;
+    WINDOW * const  wnd;
     const static unsigned char width = 8;
     const static unsigned char height = 8;
     const unsigned int max_x, max_y;
 public:
-    GameWindow(int, int);
+    GameWindow(unsigned int, unsigned int, unsigned int, unsigned int);
     ~GameWindow(void);
-
 };
 
 class GameScreen
@@ -22,6 +21,8 @@ class GameScreen
 public:
     GameScreen(void);
     ~GameScreen(void);
+    void build_window(unsigned int, unsigned int);
+    void destroy_window();
     void draw(void);
 };
 

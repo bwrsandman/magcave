@@ -3,20 +3,30 @@
 GameScreen::GameScreen(void)
     : scr(initscr())                   /* Initialize screen */
 {
-    /* Make window for game */
-    int x, y;
-    getmaxyx(scr, y, x);
-    gwnd = new GameWindow(x, y);
-    cbreak();                           /* No waiting for the Enter key */
-    noecho();                          /* No echoing entered keys */
-    clear();                           /* Clear screen */
+    cbreak();                           /* No waiting for the Enter key      */
+    noecho();                          /* No echoing entered keys            */
+    clear();                           /* Clear screen                       */
     this->draw();
+    this->build_window(16, 16);
+}
+
+void GameScreen::build_window(unsigned int w, unsigned int h)
+{
+    /* Make window for game */
+    unsigned int max_x, max_y;
+    getmaxyx(scr, max_y, max_x);
+    gwnd = new GameWindow(w, h, max_x, max_y);
 }
 
 GameScreen::~GameScreen(void)
 {
-    delete gwnd; gwnd = NULL;          /* Free memory of GameWindow */
-    endwin();                          /* Restore orignial screen */
+    this->destroy_window();
+    endwin();                          /* Restore orignial screen            */
+}
+
+void GameScreen::destroy_window()
+{
+    delete gwnd; gwnd = NULL;
 }
 
 void GameScreen::draw(void)
@@ -32,7 +42,7 @@ void GameScreen::draw(void)
     {
         pos = (i + 1) * hscale + hpad;
         move(vpad, pos);
-        delch(); insch(i + 'A');       /* Clear cell and add letter */
+        delch(); insch(i + 'A');       /* Clear cell and add letter          */
         move((height + 1) * vscale + vpad, pos);
         delch(); insch(i + 'A');
     }
@@ -48,16 +58,20 @@ void GameScreen::draw(void)
     refresh();
 }
 
-GameWindow::GameWindow(int mx, int my)
+GameWindow::GameWindow(unsigned w, unsigned h, unsigned int mx, unsigned int my)
     : max_x(mx)
     , max_y(my)
-    , wnd(NULL) /* TODO TMP */
+    , wnd(newwin(h, w, 8, 8))         /* TODO TMP */
 {
+    box(this->wnd, 0 , 0);             /* 0, 0 gives default characters for
+                                        * the vertical and horizontal lines  */
+    wrefresh(this->wnd);               /* Show that box                      */
 
 }
 
 GameWindow::~GameWindow(void)
-{
-
-    /* Remove WINDOW */
+{        
+    /* Erase the borders */
+    wborder(this->wnd, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    wrefresh(this->wnd);
 }
