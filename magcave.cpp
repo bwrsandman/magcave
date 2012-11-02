@@ -1,10 +1,18 @@
 #include <iostream>           /* For cout and cin */
+#include <unistd.h>           /* For sleep */
+#include "gameboard.h"        /* For game board drawing using curses */
 #include "minimax.h"
 #include "readxml.h"
 
 int main(int argc, char * argv[])
 {
     const char depth = (argc == 1)? DEPTH_DEFAULT: atoi(argv[1]);
+    
+    /* Display board */
+    Gameboard* pboard = new Gameboard();
+    sleep(2);
+    delete pboard; pboard = NULL;
+    
     /* Load minimax tree from xml file. */
     const minimaxNode* n = readxmltree(xmlfilename);
     /* Perform minimax, print result. */

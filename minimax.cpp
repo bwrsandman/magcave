@@ -1,17 +1,5 @@
 #include <algorithm>          /* For std::max */
-#include <iostream>           /* For cout and cin */
-#include <unistd.h>           /* For sleep */
 #include "minimax.h"
-#include "readxml.h"
-
-int main(int argc, char * argv[])
-{
-    /* Load minimax tree from xml file. */
-    const minimaxNode* n = readxmltree(xmlfilename);
-    /* Perform minimax, print result. */
-    std::cout << int(minimax(n, atoi(argv[1]))) << std::endl;
-    return 0;
-}
 
 /* Minimax function. */
 const signed char minimax(const minimaxNode* node, const char depth, signed char alpha, signed char beta, bool max)

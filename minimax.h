@@ -12,6 +12,8 @@ struct minimaxNode
     struct minimaxNode* next;                 /* Link to next sibling */
 };
 
+const char DEPTH_DEFAULT = 5;
+
 const signed char heur(const minimaxNode* n);
 /* Set alpha to -infinity and beta to +infinity, in this case, 
  * minimum and maximum CHAR values */
