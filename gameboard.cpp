@@ -7,15 +7,15 @@ GameScreen::GameScreen(void)
     noecho();                          /* No echoing entered keys            */
     clear();                           /* Clear screen                       */
     this->draw();
-    this->build_window(16, 16);
+    this->build_window();
 }
 
-void GameScreen::build_window(unsigned int w, unsigned int h)
+void GameScreen::build_window()
 {
     /* Make window for game */
     unsigned int max_x, max_y;
     getmaxyx(scr, max_y, max_x);
-    gwnd = new GameWindow(w, h, max_x, max_y);
+    gwnd = new GameWindow(max_x, max_y);
 }
 
 GameScreen::~GameScreen(void)
@@ -27,51 +27,61 @@ GameScreen::~GameScreen(void)
 void GameScreen::destroy_window()
 {
     delete gwnd; gwnd = NULL;
+    this->draw();
 }
 
 void GameScreen::draw(void)
 {
-    /* TODO: Remove width and height */
-    const char width = 8;
-    const char height = 8;
-
-    const unsigned char hscale = 5, vscale = 2, hpad = 25, vpad = 5;
-    unsigned int pos=0;
-    /* Top and bottom label rows (double space horizontally) */
-    for(int i = 0; i < width; ++i)
-    {
-        pos = (i + 1) * hscale + hpad;
-        move(vpad, pos);
-        delch(); insch(i + 'A');       /* Clear cell and add letter          */
-        move((height + 1) * vscale + vpad, pos);
-        delch(); insch(i + 'A');
-    }
-    /* Left and Right label rows */
-    for(int i = 0; i < height; ++i)
-    {
-        pos = (i + 1) * vscale + vpad;
-        move(pos, hpad);
-        delch(); insch(height - i + '0');
-        move(pos, (width + 1) * hscale + hpad);
-        delch(); insch(height - i + '0');
-    }
     refresh();
+    /* do Window now */
+    if (this->gwnd)
+        this->gwnd->draw();
 }
 
-GameWindow::GameWindow(unsigned w, unsigned h, unsigned int mx, unsigned int my)
+GameWindow::GameWindow(unsigned int mx, unsigned int my)
     : max_x(mx)
     , max_y(my)
-    , wnd(newwin(h, w, 8, 8))         /* TODO TMP */
+    , wnd(newwin((height + 1) * vscale + 3, 
+                 (width + 1) * hscale + 3, 
+                 vpad - 1, hpad - 1))
 {
     box(this->wnd, 0 , 0);             /* 0, 0 gives default characters for
                                         * the vertical and horizontal lines  */
-    wrefresh(this->wnd);               /* Show that box                      */
+    this->draw();                      /* Show that box                      */
 
 }
 
 GameWindow::~GameWindow(void)
-{        
-    /* Erase the borders */
-    wborder(this->wnd, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+{   
+    /* Erase the contents of the window */
+    wclear(this->wnd);
+    wrefresh(this->wnd);
+    /* TODO: How do you free this->wnd); */
+}
+
+void GameWindow::draw(void)
+{
+    /* TODO: Some sort of centering, maybe use printw */
+    unsigned int pos = 0;
+    char c = 0;
+    /* 1, 1 avoids overwriting the borders */
+    for(int i = 0; i < width; ++i)
+    {
+        pos = 1 + (i + 1) * hscale;
+        c = 'A' + i;
+        mvwdelch(this->wnd, 1, pos); 
+        winsch(this->wnd, c);
+        mvwdelch(this->wnd, (height + 1) * vscale + 1, pos); 
+        winsch(this->wnd, c);
+    }
+    for(int i = 0; i < height; ++i)
+    {
+        pos = 1 + (i + 1) * vscale;
+        c = '0' + height - i;
+        mvwdelch(this->wnd, pos, 1); 
+        winsch(this->wnd, c);
+        mvwdelch(this->wnd, pos, (width + 1) * hscale + 1); 
+        winsch(this->wnd, c);
+    }
     wrefresh(this->wnd);
 }
