@@ -1,11 +1,17 @@
 #include "gameboard.h"
 
 GameScreen::GameScreen(void)
-    : scr(initscr())                   /* Initialize screen */
+    : scr(initscr())                   /* Initialize screen                  */
 {
-    cbreak();                           /* No waiting for the Enter key      */
+    start_color();                     /* Set Colors                         */
+    use_default_colors();
+    init_pair(1, -1, COLOR_BLUE);      /* Background                         */
+    init_pair(2, COLOR_BLACK, COLOR_WHITE); /* Window                        */
+    //    assume_default_colors(COLOR_WHITE, COLOR_BLUE);
+    cbreak();                          /* No waiting for the Enter key       */
     noecho();                          /* No echoing entered keys            */
     clear();                           /* Clear screen                       */
+
     this->draw();
     this->build_window();
 }
@@ -13,9 +19,8 @@ GameScreen::GameScreen(void)
 void GameScreen::build_window()
 {
     /* Make window for game */
-    unsigned int max_x, max_y;
-    getmaxyx(scr, max_y, max_x);
-    gwnd = new GameWindow(max_x, max_y);
+    getmaxyx(this->scr, this->height, this->width);
+    gwnd = new GameWindow(this->width, this->height);
 }
 
 GameScreen::~GameScreen(void)
@@ -32,6 +37,13 @@ void GameScreen::destroy_window()
 
 void GameScreen::draw(void)
 {
+    getmaxyx(this->scr, this->height, this->width);
+    /* Fill background color */
+    for(int i = 0; i < this->height; ++i)
+    {
+        mvchgat(i, 0, -1, 0, 1, NULL);
+    }
+    move(0,0);
     refresh();
     /* do Window now */
     if (this->gwnd)
@@ -45,8 +57,6 @@ GameWindow::GameWindow(unsigned int mx, unsigned int my)
                  (width + 1) * hscale + 3, 
                  vpad - 1, hpad - 1))
 {
-    box(this->wnd, 0 , 0);             /* 0, 0 gives default characters for
-                                        * the vertical and horizontal lines  */
     this->draw();                      /* Show that box                      */
 
 }
@@ -83,5 +93,15 @@ void GameWindow::draw(void)
         mvwdelch(this->wnd, pos, (width + 1) * hscale + 1); 
         winsch(this->wnd, c);
     }
+    for(int i = 0; i < this->height * hscale; ++i)
+    {
+        mvwchgat(this->wnd, i, 0, -1, 0, 2, NULL);
+    }
+    wattron(this->wnd, COLOR_PAIR(2));
+    wattron(this->wnd, A_BOLD); 
+    box(this->wnd, 0 , 0);             /* 0, 0 gives default characters for
+                                        * the vertical and horizontal lines  */
+    wattroff(this->wnd, A_BOLD); 
+    wattroff(this->wnd, COLOR_PAIR(2));
     wrefresh(this->wnd);
 }

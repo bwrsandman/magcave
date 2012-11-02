@@ -20,6 +20,7 @@ class GameScreen
 {
     const WINDOW * const scr;
     GameWindow * gwnd;
+    unsigned int width, height;
 public:
     GameScreen(void);
     ~GameScreen(void);
