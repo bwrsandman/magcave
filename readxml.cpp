@@ -49,7 +49,7 @@ const minimaxNode* readxmlnode(const xmlNode* const root,
     
     /* Construct inital Node, with value, and parent. Sibbling and children
        are added later. */
-    struct minimaxNode newNode = {val, NULL, parent, NULL};
+    struct minimaxNode newNode = {val, NULL, NULL};
     
     /* Iterate through children of XML node, which will be children of minimaxNode */
     for(xmlNode *cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
