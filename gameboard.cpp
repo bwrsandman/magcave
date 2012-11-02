@@ -1,22 +1,30 @@
 #include "gameboard.h"
 
-Gameboard::Gameboard(void)
-	: wnd(initscr())		    	/* Initialize window */
+GameScreen::GameScreen(void)
+    : scr(initscr())                   /* Initialize screen */
 {
-	cbreak();				    	/* No waiting for the Enter key */
-    noecho();                       /* No echoing entered keys */
-	clear();					    /* Clear screen */
-	this->draw();
+    /* Make window for game */
+    int x, y;
+    getmaxyx(scr, y, x);
+    gwnd = new GameWindow(x, y);
+    cbreak();                           /* No waiting for the Enter key */
+    noecho();                          /* No echoing entered keys */
+    clear();                           /* Clear screen */
+    this->draw();
 }
 
-Gameboard::~Gameboard(void)
+GameScreen::~GameScreen(void)
 {
-	endwin();               	    /* Restore orignial window */
-	//delete wnd; wnd=NULL; 	    /* Causes error */
+    delete gwnd; gwnd = NULL;          /* Free memory of GameWindow */
+    endwin();                          /* Restore orignial screen */
 }
 
-void Gameboard::draw(void)
+void GameScreen::draw(void)
 {
+    /* TODO: Remove width and height */
+    const char width = 8;
+    const char height = 8;
+
     const unsigned char hscale = 5, vscale = 2, hpad = 25, vpad = 5;
     unsigned int pos=0;
     /* Top and bottom label rows (double space horizontally) */
@@ -24,9 +32,9 @@ void Gameboard::draw(void)
     {
         pos = (i + 1) * hscale + hpad;
         move(vpad, pos);
-        delch(); insch(i + 'A');    /* Clear cell and add letter */
+        delch(); insch(i + 'A');       /* Clear cell and add letter */
         move((height + 1) * vscale + vpad, pos);
-        delch(); insch(i + 'A');    
+        delch(); insch(i + 'A');
     }
     /* Left and Right label rows */
     for(int i = 0; i < height; ++i)
@@ -37,5 +45,19 @@ void Gameboard::draw(void)
         move(pos, (width + 1) * hscale + hpad);
         delch(); insch(height - i + '0');
     }
-	refresh();
+    refresh();
+}
+
+GameWindow::GameWindow(int mx, int my)
+    : max_x(mx)
+    , max_y(my)
+    , wnd(NULL) /* TODO TMP */
+{
+
+}
+
+GameWindow::~GameWindow(void)
+{
+
+    /* Remove WINDOW */
 }
