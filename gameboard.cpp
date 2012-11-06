@@ -64,8 +64,8 @@ GameWindow::GameWindow(unsigned int mx, unsigned int my)
 GameWindow::~GameWindow(void)
 {   
     /* Erase the contents of the window */
-    wclear(this->wnd);
-    wrefresh(this->wnd);
+    this->clear();
+    this->refresh();
     /* TODO: How do you free this->wnd); */
 }
 
@@ -99,9 +99,10 @@ void GameWindow::draw(void)
     }
     wattron(this->wnd, COLOR_PAIR(2));
     wattron(this->wnd, A_BOLD); 
-    box(this->wnd, 0 , 0);             /* 0, 0 gives default characters for
+    box(this->wnd, 0, 0);             /* 0, 0 gives default characters for
                                         * the vertical and horizontal lines  */
     wattroff(this->wnd, A_BOLD); 
     wattroff(this->wnd, COLOR_PAIR(2));
-    wrefresh(this->wnd);
+    this->move(1, 1);
+    this->refresh();
 }

@@ -10,6 +10,9 @@ class GameWindow
     const static unsigned char height = 8;
     const static unsigned char hscale = 5, vscale = 2, hpad = 25, vpad = 5;
     const unsigned int max_x, max_y;
+    void move(unsigned int a, unsigned int b){wmove(this->wnd, a, b);}
+    void refresh(){wrefresh(this->wnd);}
+    void clear(){wclear(this->wnd);}
 public:
     GameWindow(unsigned int, unsigned int);
     ~GameWindow(void);
@@ -21,6 +24,9 @@ class GameScreen
     const WINDOW * const scr;
     GameWindow * gwnd;
     unsigned int width, height;
+    void move(unsigned int a, unsigned int b) const {move(a, b);}
+    void refresh() const {refresh();}
+    void clear() const {clear();}
 public:
     GameScreen(void);
     ~GameScreen(void);
