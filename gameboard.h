@@ -21,12 +21,12 @@ public:
 
 class GameScreen
 {
-    const WINDOW * const scr;
+    WINDOW * const scr;
     GameWindow * gwnd;
     unsigned int width, height;
-    void move(unsigned int a, unsigned int b) const {move(a, b);}
-    void refresh() const {refresh();}
-    void clear() const {clear();}
+    void move(unsigned int a, unsigned int b) const {wmove(this->scr, a, b);}
+    void refresh() const {wrefresh(this->scr);}
+    void clear() const {wclear(this->scr);}
 public:
     GameScreen(void);
     ~GameScreen(void);

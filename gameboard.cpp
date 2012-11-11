@@ -39,7 +39,7 @@ void GameScreen::draw(void)
 {
     getmaxyx(this->scr, this->height, this->width);
     /* Fill background color */
-    for(int i = 0; i < this->height; ++i)
+    for(unsigned int i = 0; i < this->height; ++i)
     {
         mvchgat(i, 0, -1, 0, 1, NULL);
     }
@@ -51,11 +51,11 @@ void GameScreen::draw(void)
 }
 
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
-    : max_x(mx)
-    , max_y(my)
-    , wnd(newwin((height + 1) * vscale + 3, 
+    : wnd(newwin((height + 1) * vscale + 3, 
                  (width + 1) * hscale + 3, 
                  vpad - 1, hpad - 1))
+    , max_x(mx)
+    , max_y(my)
 {
     this->draw();                      /* Show that box                      */
 
@@ -100,7 +100,7 @@ void GameWindow::draw(void)
     wattron(this->wnd, COLOR_PAIR(2));
     wattron(this->wnd, A_BOLD); 
     box(this->wnd, 0, 0);             /* 0, 0 gives default characters for
-                                        * the vertical and horizontal lines  */
+                                       * the vertical and horizontal lines  */
     wattroff(this->wnd, A_BOLD); 
     wattroff(this->wnd, COLOR_PAIR(2));
     this->move(1, 1);

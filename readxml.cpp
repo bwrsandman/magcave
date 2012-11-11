@@ -40,8 +40,8 @@ const minimaxNode* readxmltree(const char* const filename)
 const minimaxNode* readxmlnode(const xmlNode* const root, 
                                const minimaxNode* const parent)
 {
-    minimaxNode *children_node = NULL, *prev_node = NULL, *cur_mm_node = NULL;
-    xmlChar *rootvalue = NULL, *nodevalue = NULL;
+    minimaxNode *prev_node = NULL, *cur_mm_node = NULL;
+    xmlChar *rootvalue = NULL;
     /* Get property value, an integer that is represented by "value" */
     signed char val;
     rootvalue = xmlGetProp(const_cast<xmlNode*>(root), (xmlChar*)("value"));
