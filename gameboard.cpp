@@ -180,22 +180,22 @@ void GameWindow::movecur(int ch)
 		case KEY_UP:
 		case 'w':
 		case 'W':
-			this->move(cur_x, cur_y-1);
+			this->move(cur_x, cur_y-vscale);
 			break;
 		case KEY_LEFT:
 		case 'a':
 		case 'A':
-			this->move(cur_x-1, cur_y);
+			this->move(cur_x-hscale, cur_y);
 			break;
 		case KEY_DOWN:
 		case 's':
 		case 'S':
-			this->move(cur_x, cur_y+1);
+			this->move(cur_x, cur_y+vscale);
 			break;
 		case KEY_RIGHT:
 		case 'd':
 		case 'D':
-			this->move(cur_x+1, cur_y);
-			break;
+			this->move(cur_x+hscale, cur_y);
+			break;			
 	}
 }
