@@ -10,6 +10,7 @@ GameScreen::GameScreen(void)
     //    assume_default_colors(COLOR_WHITE, COLOR_BLUE);
     cbreak();                          /* No waiting for the Enter key       */
     noecho();                          /* No echoing entered keys            */
+	keypad(scr, TRUE);
     clear();                           /* Clear screen                       */
 
     this->draw();
@@ -50,19 +51,45 @@ void GameScreen::draw(void)
         this->gwnd->draw();
 }
 
+void GameScreen::mainloop(void)
+{
+	/* Process keyboard input */
+    int ch = 0;
+    while((ch = getch()) != 'q')       /* Press q to exit                    */
+    {
+		switch(ch)
+		{
+			case 'k':
+        		this->destroy_window();
+				break;
+			default:
+				this->movecur(ch);
+		}
+    }
+}
+
+void GameScreen::movecur(int ch)
+{
+    if(gwnd)
+        gwnd->movecur(ch);
+}
+
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
-    : wnd(newwin((height + 1) * vscale + 3, 
-                 (width + 1) * hscale + 3, 
+	:sz_x((width + 1) * hscale + 3) 
+	, sz_y((height + 1) * vscale + 3)
+	, wnd(newwin(sz_y, sz_x, 
                  vpad - 1, hpad - 1))
     , max_x(mx)
     , max_y(my)
+	, cur_x(1)
+    , cur_y(1)
 {
     this->draw();                      /* Show that box                      */
 
 }
 
 GameWindow::~GameWindow(void)
-{   
+{
     /* Erase the contents of the window */
     this->clear();
     this->refresh();
@@ -107,7 +134,7 @@ void GameWindow::draw(void)
         wmove(this->wnd, vscale + 1, pos);
 		wvline(this->wnd, '|', (height*vscale));
     }
-		
+	
     for(int i = 0; i < this->height * hscale; ++i)
     {
         mvwchgat(this->wnd, i, 0, -1, 0, 2, NULL);
@@ -118,6 +145,57 @@ void GameWindow::draw(void)
                                        * the vertical and horizontal lines  */
     wattroff(this->wnd, A_BOLD); 
     wattroff(this->wnd, COLOR_PAIR(2));
-    this->move(1, 1);
+    this->move();
     this->refresh();
+}
+
+void GameWindow::move(void) const
+{
+	wmove(this->wnd, cur_y, cur_x);
+}
+
+void GameWindow::move(unsigned int x, unsigned int y)
+{
+	if (x < 1)
+		cur_x = 1;
+	else if (x >= sz_x - 1)
+		cur_x = sz_x - 2;
+	else
+		cur_x = x;
+
+	if (y < 1)
+		cur_y = 1;
+	else if (y >= sz_y - 1)
+		cur_y = sz_y - 2;
+	else
+		cur_y = y;
+
+	this->draw();
+}
+
+void GameWindow::movecur(int ch)
+{
+	switch(ch)
+	{
+		case KEY_UP:
+		case 'w':
+		case 'W':
+			this->move(cur_x, cur_y-1);
+			break;
+		case KEY_LEFT:
+		case 'a':
+		case 'A':
+			this->move(cur_x-1, cur_y);
+			break;
+		case KEY_DOWN:
+		case 's':
+		case 'S':
+			this->move(cur_x, cur_y+1);
+			break;
+		case KEY_RIGHT:
+		case 'd':
+		case 'D':
+			this->move(cur_x+1, cur_y);
+			break;
+	}
 }
