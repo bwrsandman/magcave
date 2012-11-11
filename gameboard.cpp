@@ -93,6 +93,21 @@ void GameWindow::draw(void)
         mvwdelch(this->wnd, pos, (width + 1) * hscale + 1); 
         winsch(this->wnd, c);
     }
+	
+	//Draw lines in window
+	for(int i = 0; i <= height; ++i)
+    {
+		pos = (i + 1) * vscale;
+		wmove(this->wnd, pos, hscale - 1);
+		whline(this->wnd, '_', (width*hscale));
+	}
+	for(int i = 0; i <= width + 1; ++i)
+    {
+        pos = (i) * hscale - 1;
+        wmove(this->wnd, vscale + 1, pos);
+		wvline(this->wnd, '|', (height*vscale));
+    }
+		
     for(int i = 0; i < this->height * hscale; ++i)
     {
         mvwchgat(this->wnd, i, 0, -1, 0, 2, NULL);
