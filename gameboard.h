@@ -1,7 +1,7 @@
 #ifndef GAMEBOARD_H
 #define GAMEBOARD_H
 
-#include <curses.h>
+#include <ncurses.h>
 
 class GameWindow
 {
