@@ -33,6 +33,7 @@ public:
     void build_window();
     void destroy_window();
     void draw(void);
+    void mainloop(void);
 };
 
 #endif

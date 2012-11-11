@@ -7,14 +7,14 @@
 int main(int argc, char * argv[])
 {
     const char depth = (argc == 1)? DEPTH_DEFAULT: atoi(argv[1]);
-    
+
     /* Display board */
     GameScreen* pscreen = new GameScreen();
-    sleep(2);
+    pscreen->mainloop();
     pscreen->destroy_window();
     sleep(2);
     delete pscreen; pscreen = NULL;
-    
+
     /* Load minimax tree from xml file. */
     const minimaxNode* n = readxmltree(xmlfilename);
     /* Perform minimax, print result. */

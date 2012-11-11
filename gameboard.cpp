@@ -1,4 +1,5 @@
 #include "gameboard.h"
+#include <unistd.h>           /* For sleep */
 
 GameScreen::GameScreen(void)
     : scr(initscr())                   /* Initialize screen                  */
@@ -50,6 +51,11 @@ void GameScreen::draw(void)
         this->gwnd->draw();
 }
 
+void GameScreen::mainloop(void)
+{
+    sleep(2);
+}
+
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
     : wnd(newwin((height + 1) * vscale + 3, 
                  (width + 1) * hscale + 3, 
@@ -62,7 +68,7 @@ GameWindow::GameWindow(unsigned int mx, unsigned int my)
 }
 
 GameWindow::~GameWindow(void)
-{   
+{
     /* Erase the contents of the window */
     this->clear();
     this->refresh();
@@ -106,3 +112,4 @@ void GameWindow::draw(void)
     this->move(1, 1);
     this->refresh();
 }
+
