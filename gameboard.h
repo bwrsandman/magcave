@@ -21,7 +21,7 @@ class GameWindow
 public:
     GameWindow(unsigned int, unsigned int);
     ~GameWindow(void);
-    void draw(void);
+    void draw(const GameInfo * const);
 	void movecur(int);
 	void move_to_default(bool);
 };

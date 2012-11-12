@@ -17,6 +17,7 @@ GameScreen::GameScreen(void)
 	this->ginfo = new GameInfo();      /* Initialize game rules              */
     this->draw();
     this->build_window();
+	draw();
 }
 
 void GameScreen::build_window()
@@ -53,7 +54,7 @@ void GameScreen::draw(void)
     refresh();
     /* do Window now */
     if (this->gwnd)
-        this->gwnd->draw();
+        this->gwnd->draw(ginfo);
 }
 
 void GameScreen::mainloop(void)
@@ -99,7 +100,6 @@ GameWindow::GameWindow(unsigned int mx, unsigned int my)
 	, cur_x(0)
     , cur_y(0)
 {
-    this->draw();                      /* Show that box                      */
 
 }
 
@@ -111,7 +111,7 @@ GameWindow::~GameWindow(void)
     /* TODO: How do you free this->wnd); */
 }
 
-void GameWindow::draw(void)
+void GameWindow::draw(const GameInfo * const ginfo)
 {
     /* TODO: Some sort of centering, maybe use printw */
     unsigned int pos = 0;
