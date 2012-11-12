@@ -2,6 +2,7 @@
 
 GameScreen::GameScreen(void)
     : scr(initscr())                   /* Initialize screen                  */
+	, left_turn(true)
 {
     start_color();                     /* Set Colors                         */
     use_default_colors();
@@ -39,6 +40,8 @@ void GameScreen::destroy_window()
 void GameScreen::draw(void)
 {
     getmaxyx(this->scr, this->height, this->width);
+    move(1,2);
+	printw("%s player's turn.    ", (left_turn)?"Left":"Right");
     /* Fill background color */
     for(unsigned int i = 0; i < this->height; ++i)
     {
@@ -55,16 +58,26 @@ void GameScreen::mainloop(void)
 {
 	/* Process keyboard input */
     int ch = 0;
-    while((ch = getch()) != 'q')       /* Press q to exit                    */
+	bool done = false;
+    while(!done)
     {
+		ch = getch();				   /* Read keyboard input                */
 		switch(ch)
 		{
+			case 'q':                  /* Press q to exit                    */
+				done = true;
+				break;
 			case 'k':
         		this->destroy_window();
+				break;
+			case '\n':
+				left_turn ^= true;
+				gwnd->move_to_default(left_turn);
 				break;
 			default:
 				this->movecur(ch);
 		}
+		this->draw();
     }
 }
 
@@ -81,8 +94,8 @@ GameWindow::GameWindow(unsigned int mx, unsigned int my)
                  vpad - 1, hpad - 1))
     , max_x(mx)
     , max_y(my)
-	, cur_x(1)
-    , cur_y(1)
+	, cur_x(0)
+    , cur_y(0)
 {
     this->draw();                      /* Show that box                      */
 
@@ -154,6 +167,13 @@ void GameWindow::move(void) const
 	wmove(this->wnd, (cur_y + 2) * vscale, (cur_x + 1) * hscale);
 }
 
+void GameWindow::move_to_default(bool left)
+{
+	cur_x = cur_y = 0;
+	if(!left)
+		cur_x += width - 1;
+}
+
 void GameWindow::move(int x, int y)
 {
 	x = x % width;
@@ -166,8 +186,6 @@ void GameWindow::move(int x, int y)
 	cur_y += y;
 	cur_x %= width;
 	cur_y %= height;
-
-	this->draw();
 }
 
 void GameWindow::movecur(int ch)
