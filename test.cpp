@@ -4,11 +4,13 @@ int main(int argc, char * argv[])
 {
 	GameInfo test;
 	
-	
+	//check for available positions
+	/**
 	for(int i = 0; i < 16; ++i)
 	{
 		cout << test.avail_positions[i] << endl;
 	}
+	**/
 
 	//test horizontal
 	/**

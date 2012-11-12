@@ -41,7 +41,6 @@ void GameInfo::move(int posx, int posy)
 	** Check that a position is available
 	** ----------------------------------
 	***/
-	bool avail = false;
 	for(int i = 0; i < 16; ++i)
 	{
 		if (position == avail_positions[i])
