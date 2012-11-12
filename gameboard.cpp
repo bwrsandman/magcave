@@ -14,6 +14,7 @@ GameScreen::GameScreen(void)
 	keypad(scr, TRUE);
     clear();                           /* Clear screen                       */
 
+	this->ginfo = new GameInfo();      /* Initialize game rules              */
     this->draw();
     this->build_window();
 }
@@ -27,6 +28,7 @@ void GameScreen::build_window()
 
 GameScreen::~GameScreen(void)
 {
+	delete this->ginfo;
     this->destroy_window();
     endwin();                          /* Restore orignial screen            */
 }

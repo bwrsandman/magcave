@@ -32,11 +32,10 @@ GameInfo::~GameInfo(void)
 
 }
 
-void GameInfo::move(int posx, int posy)
+bool GameInfo::move(int posx, int posy)
 {
 	int posindex = -1;
-	int position = posx + 8*(posy);
-	
+	int position = getposition(posx, posy);
 	/* -----------------------------------
 	** Check that a position is available
 	** ----------------------------------
@@ -52,103 +51,10 @@ void GameInfo::move(int posx, int posy)
 	if (posindex==-1)
 		cout << "You have selected an unavailable position" << endl;
 		// *TODO: Actually do something here
+		return false;
 	
 	//Take the position:	
 	board[position] = player_no;
-	
-	/* ----------------------------------------------------------------
-	** Check if this new placement results in a win
-	** Check horizontally, vertically, and diagonally around placement
-	** -----------------------------------------------------------------
-	***/
-	
-	//Check for horizontal win 
-	int wincount = 1;	
-		//Backwards: (position -1*i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ((position - i) < 0 || (position-i)%8 == 7 || board[position-i] != player_no) //don't go outside the range or wrap
-			break;
-		else
-			wincount++;
-	}
-		//Forwards: (position + 1*i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ((position + i) > 63 || (position+i)%8 == 0 || board[position+i] != player_no) //don't go outside the range or wrap
-			break;
-		else
-			wincount++;
-	}
-	
-	if (wincount == 5)
-		cout << "Player # " << player_no << " wins " << " by horizontal!" << endl;
-	
-	//Check for vertical win 
-	wincount = 1;	
-		//Downwards: (position - 8*i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position - 8*i) < 0 || board[position - 8*i] != player_no)//don't go outside the vertical range
-			break;
-		else
-			wincount++;	
-	}
-		//Upwards: (position + 8) * i) )
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position + 8*i) > 63 || board[position + 8*i] != player_no)//don't go outside the vertical range
-			break;
-		else
-			wincount++;	
-	}
-	
-	if (wincount == 5)
-		cout << "Player # " << player_no << " wins " << " by vertical!" << endl;
-	
-	//Check for diagonal down win 
-	wincount = 1;
-		//Downwards: (position + i + 8*i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position + i + 8*i) > 63 || board[position + i + 8*i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;	
-	}
-		//Upwards: (position - i - 8*i))
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position - i - 8*i) < 0 || board[position - i - 8*i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;	
-	}
-	
-	if (wincount == 5)
-		cout << "Player # " << player_no << " wins " << " by downward diagonal!" << endl;
-	
-	//Check for diagonal up win
-	wincount = 1;	
-		//Upwards: (position + i - 8*i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position + i - 8*i) < 0 || board[position + i - 8*i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;
-	}
-		//Downwards: (position - i + 8*i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position - i + 8*i) > 63 || board[position - i + 8*i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;	
-	}
-	
-	if (wincount == 5)
-		cout << "Player # " << player_no << " wins " << " by upward diagonal!" << endl;
 	
 	/* ----------------------
 	** Update available list
@@ -166,9 +72,121 @@ void GameInfo::move(int posx, int posy)
 	** Switch to next player
 	** ----------------------
 	***/
-	if (player_no == 1)
-		player_no = 2;
-	else
-		player_no = 1;
+	player_no ^= 3; /* flip the last 2 bits */
+	return true;
 			
+}
+
+bool GameInfo::checkwin(int posx, int posy) const
+{
+	/* ----------------------------------------------------------------
+	** Check if this new placement results in a win
+	** Check horizontally, vertically, and diagonally around placement
+	** -----------------------------------------------------------------
+	***/
+
+	int position = getposition(posx, posy);
+	
+	//Check for horizontal win 
+	int wincount = 1;	
+	//Backwards: (position -1 * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ((position - i) < 0 || (position-i)%8 == 7 || board[position-i] != player_no) //don't go outside the range or wrap
+			break;
+		else
+			wincount++;
+	}
+	//Forwards: (position + 1 * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ((position + i) > 63 || (position+i)%8 == 0 || board[position+i] != player_no) //don't go outside the range or wrap
+			break;
+		else
+			wincount++;
+	}
+	
+	if (wincount == 5)
+	{
+		cout << "Player # " << player_no << " wins " << " by horizontal!" << endl;
+		return true;
+	}
+
+	//Check for vertical win 
+	wincount = 1;	
+	// Upwards: ( (position - 8) * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position - 8*i) < 0 || board[position - 8*i] != player_no)//don't go outside the vertical range
+			break;
+		else
+			wincount++;	
+	}
+	//Downwards: ( (position + 8) * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position + 8*i) > 63 || board[position + 8*i] != player_no)//don't go outside the vertical range
+			break;
+		else
+			wincount++;	
+	}
+	
+	if (wincount == 5)
+	{
+		cout << "Player # " << player_no << " wins " << " by vertical!" << endl;
+		return true;
+	}
+
+	//Check for diagonal down win 
+	wincount = 1;
+	//Downwards: (position + 9 * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position + 9 * i) > 63 || board[position + 9 * i] != player_no)//don't go outside the board
+			break;
+		else
+			wincount++;	
+	}
+	//Upwards: (position - 9 * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position - 9 * i) < 0 || board[position - 9 * i] != player_no)//don't go outside the board
+			break;
+		else
+			wincount++;	
+	}
+	
+	if (wincount == 5)
+	{
+		cout << "Player # " << player_no << " wins " << " by downward diagonal!" << endl;
+		return true;
+	}
+	
+	//Check for diagonal up win
+	wincount = 1;	
+	//Upwards: (position - 7 * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position -7 * i) < 0 || board[position - 7 * i] != player_no)//don't go outside the board
+			break;
+		else
+			wincount++;
+	}
+	//Downwards: (position + 7 * i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position + 7 * i) > 63 || board[position + 7 * i] != player_no)//don't go outside the board
+			break;
+		else
+			wincount++;	
+	}
+	
+	if (wincount == 5)
+	{
+		cout << "Player # " << player_no << " wins " << " by upward diagonal!" << endl;
+		return true;
+	}
+
+	/* All tests have failed */
+	return false;
 }

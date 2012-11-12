@@ -1,6 +1,6 @@
 CC=g++
-SOURCE=magcave.cpp minimax.cpp readxml.cpp gameboard.cpp
-HEADERS=minimax.h readxml.h gameboard.h
+SOURCE=magcave.cpp minimax.cpp readxml.cpp gameboard.cpp gameinfo.cpp
+HEADERS=minimax.h readxml.h gameboard.h gameinfo.h
 NAME=magcave
 OUTPUT=-o ${NAME}
 INCLUDE=-I/usr/include/libxml2 -I/usr/include/ncurses

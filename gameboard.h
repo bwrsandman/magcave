@@ -2,6 +2,7 @@
 #define GAMEBOARD_H
 
 #include <ncurses.h>
+#include "gameinfo.h"
 
 class GameWindow
 {
@@ -29,6 +30,7 @@ class GameScreen
 {
     WINDOW * const scr;
     GameWindow * gwnd;
+	GameInfo * ginfo;
     unsigned int width, height;
     void move(unsigned int a, unsigned int b) const {wmove(this->scr, a, b);}
     void refresh() const {wrefresh(this->scr);}
