@@ -84,6 +84,15 @@ void GameScreen::mainloop(void)
 						ch = getch();
 						done = true;
 					}
+					if (ginfo->check_stalemate())
+					{
+						move(1,2);
+						printw("STALEMATE              ");
+						move(2,2);
+						printw("Press any key to continue...");
+						ch = getch();
+						done = true;
+					}
 					left_turn ^= true;
 					gwnd->move_to_default(left_turn);
 				}

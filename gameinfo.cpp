@@ -194,3 +194,11 @@ bool GameInfo::checkwin(int posx, int posy) const
 	/* All tests have failed */
 	return false;
 }
+
+bool GameInfo::check_stalemate(void) const
+{
+	for (int i = 0; i < 64; ++i)
+		if (board[i] == 0)
+			return false;
+	return true;
+}

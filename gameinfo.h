@@ -14,4 +14,5 @@ public:
     ~GameInfo(void);
 	bool move(int, int);
 	bool checkwin(int, int) const;
+	bool check_stalemate(void) const;
 };
