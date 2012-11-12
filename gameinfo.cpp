@@ -1,8 +1,8 @@
 #include "gameinfo.h"
 
 /*
-** *TODO: Replace 16, 64 with const
-** Clean up win verification
+** TODO: Replace 16 & 64 with const
+** Actually have something happen if a player wins or picks an invalid location
 **/
 
 GameInfo::GameInfo()
@@ -21,7 +21,6 @@ GameInfo::GameInfo()
 	//Either player 1 or 2
 	player_no = 1;
 	
-	//will change this just couldnt rememer best way to initialize
 	for(int i = 0; i < 64; ++i)
 	{
 		board[i] = 0;
@@ -66,102 +65,91 @@ void GameInfo::move(int posx, int posy)
 	
 	//Check for horizontal win 
 	int wincount = 1;	
-		//Backwards: (position -1 ) * i
+		//Backwards: (position -1*i)
 	for(int i = 1; i < 6; ++i)
 	{
-		if ((position - i) < 0 || (position-i)%8 == 7) //don't go outside the range or wrap
+		if ((position - i) < 0 || (position-i)%8 == 7 || board[position-i] != player_no) //don't go outside the range or wrap
 			break;
-		if (board[position-i] == player_no)
-			wincount++;
 		else
-			break; //stop lookin in that direction
+			wincount++;
 	}
-		//Forwards: (position + 1) * i
+		//Forwards: (position + 1*i)
 	for(int i = 1; i < 6; ++i)
 	{
-		if ((position + i) > 63 || (position+i)%8 == 0) //don't go outside the range or wrap
+		if ((position + i) > 63 || (position+i)%8 == 0 || board[position+i] != player_no) //don't go outside the range or wrap
 			break;
-		if (board[position+i] == player_no)
-			wincount++;
 		else
-			break;
+			wincount++;
 	}
+	
+	if (wincount == 5)
+		cout << "Player # " << player_no << " wins " << " by horizontal!" << endl;
 	
 	//Check for vertical win 
 	wincount = 1;	
 		//Downwards: (position - 8*i)
 	for(int i = 1; i < 6; ++i)
 	{
-		if ( (position - 8*i) < 0 )//don't go outside the vertical range
+		if ( (position - 8*i) < 0 || board[position - 8*i] != player_no)//don't go outside the vertical range
 			break;
-		if ((board[position - 8*i] == player_no))
-			wincount++;	
 		else
-			break;
+			wincount++;	
 	}
 		//Upwards: (position + 8) * i) )
 	for(int i = 1; i < 6; ++i)
 	{
-		if ( (position + 8*i) > 63 )//don't go outside the vertical range
+		if ( (position + 8*i) > 63 || board[position + 8*i] != player_no)//don't go outside the vertical range
 			break;
-		if ((board[position + 8*i] == player_no))
-			wincount++;	
 		else
-			break;
+			wincount++;	
 	}
+	
+	if (wincount == 5)
+		cout << "Player # " << player_no << " wins " << " by vertical!" << endl;
 	
 	//Check for diagonal down win 
 	wincount = 1;
 		//Downwards: (position + i + 8*i)
 	for(int i = 1; i < 6; ++i)
 	{
-		if ( (position + i + 8*i) > 63 )//don't go outside the board
+		if ( (position + i + 8*i) > 63 || board[position + i + 8*i] != player_no)//don't go outside the board
 			break;
-		if ((board[position + i + 8*i] == player_no))
-			wincount++;	
 		else
-			break;
+			wincount++;	
 	}
 		//Upwards: (position - i - 8*i))
 	for(int i = 1; i < 6; ++i)
 	{
-		if ( (position - i - 8*i) < 0 )//don't go outside the board
+		if ( (position - i - 8*i) < 0 || board[position - i - 8*i] != player_no)//don't go outside the board
 			break;
-		if ((board[position - i - 8*i] == player_no))
-			wincount++;	
 		else
-			break;
+			wincount++;	
 	}
 	
-	//Check for diagonal up win
-	wincount = 1;
+	if (wincount == 5)
+		cout << "Player # " << player_no << " wins " << " by downward diagonal!" << endl;
 	
+	//Check for diagonal up win
+	wincount = 1;	
 		//Upwards: (position + i - 8*i)
 	for(int i = 1; i < 6; ++i)
 	{
-		if ( (position + i - 8*i) < 0 )//don't go outside the board
+		if ( (position + i - 8*i) < 0 || board[position + i - 8*i] != player_no)//don't go outside the board
 			break;
-		if ((board[position + i - 8*i] == player_no))
-			wincount++;	
 		else
-			break;
+			wincount++;
 	}
 		//Downwards: (position - i + 8*i)
 	for(int i = 1; i < 6; ++i)
 	{
-		if ( (position - i + 8*i) > 63 )//don't go outside the board
+		if ( (position - i + 8*i) > 63 || board[position - i + 8*i] != player_no)//don't go outside the board
 			break;
-		if ((board[position - i + 8*i] == player_no))
-			wincount++;	
 		else
-			break;
+			wincount++;	
 	}
 	
-	cout << "wincount # " << wincount << endl;
-	
 	if (wincount == 5)
-		cout << "Player # " << player_no << " wins! " << endl;
-	
+		cout << "Player # " << player_no << " wins " << " by upward diagonal!" << endl;
 	
 	/* ----------------------
 	** Update available list
@@ -170,7 +158,7 @@ void GameInfo::move(int posx, int posy)
 	//If a spot to the left or right is available, add it (make sure we are not on edge)
 	if ( (position+1)%8 != 0 && board[position + 1] == 0)
 		avail_positions[posindex] = position + 1;
-	else if ( (position-1)%8 != 7	&& board[position - 1] == 0)
+	else if ( (position-1)%8 != 7 && board[position - 1] == 0)
 		avail_positions[posindex] = position - 1;
 	else
 		avail_positions[posindex] = -1;
