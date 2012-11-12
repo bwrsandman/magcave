@@ -164,7 +164,7 @@ void GameWindow::draw(void)
 
 void GameWindow::move(void) const
 {
-	wmove(this->wnd, (cur_y + 2) * vscale, (cur_x + 1) * hscale);
+	wmove(this->wnd, (cur_y + 2) * vscale - 1, (cur_x + 1) * hscale + 1);
 }
 
 void GameWindow::move_to_default(bool left)
