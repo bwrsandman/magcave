@@ -16,11 +16,13 @@ class GameWindow
     void move(int, int);
     void refresh(){wrefresh(this->wnd);}
     void clear(){wclear(this->wnd);}
+
 public:
     GameWindow(unsigned int, unsigned int);
     ~GameWindow(void);
     void draw(void);
 	void movecur(int);
+	void move_to_default(bool);
 };
 
 class GameScreen
@@ -31,6 +33,9 @@ class GameScreen
     void move(unsigned int a, unsigned int b) const {wmove(this->scr, a, b);}
     void refresh() const {wrefresh(this->scr);}
     void clear() const {wclear(this->scr);}
+	//Player * left_player, * right_player;
+	bool left_turn;
+
 public:
     GameScreen(void);
     ~GameScreen(void);
