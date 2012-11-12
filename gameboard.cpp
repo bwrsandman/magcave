@@ -151,24 +151,21 @@ void GameWindow::draw(void)
 
 void GameWindow::move(void) const
 {
-	wmove(this->wnd, cur_y, cur_x);
+	wmove(this->wnd, (cur_y + 2) * vscale, (cur_x + 1) * hscale);
 }
 
-void GameWindow::move(unsigned int x, unsigned int y)
+void GameWindow::move(int x, int y)
 {
-	if (x < 1)
-		cur_x = 1;
-	else if (x >= sz_x - 1)
-		cur_x = sz_x - 2;
-	else
-		cur_x = x;
-
-	if (y < 1)
-		cur_y = 1;
-	else if (y >= sz_y - 1)
-		cur_y = sz_y - 2;
-	else
-		cur_y = y;
+	x = x % width;
+	y = y % height;
+	if (cur_x == 0 && x < 0)
+		cur_x = width;
+	if (cur_y == 0 && y < 0)
+		cur_y = height;
+	cur_x += x;
+	cur_y += y;
+	cur_x %= width;
+	cur_y %= height;
 
 	this->draw();
 }
@@ -180,22 +177,22 @@ void GameWindow::movecur(int ch)
 		case KEY_UP:
 		case 'w':
 		case 'W':
-			this->move(cur_x, cur_y-vscale);
+			this->move(0, -1); 
 			break;
 		case KEY_LEFT:
 		case 'a':
 		case 'A':
-			this->move(cur_x-hscale, cur_y);
+			this->move(-1, 0);
 			break;
 		case KEY_DOWN:
 		case 's':
 		case 'S':
-			this->move(cur_x, cur_y+vscale);
+			this->move(0, 1);
 			break;
 		case KEY_RIGHT:
 		case 'd':
 		case 'D':
-			this->move(cur_x+hscale, cur_y);
+			this->move(1, 0);
 			break;			
 	}
 }

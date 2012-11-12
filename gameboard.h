@@ -13,7 +13,7 @@ class GameWindow
     const unsigned int max_x, max_y;
 	unsigned int cur_x, cur_y;
     void move(void) const;
-    void move(unsigned int a, unsigned int b); //{wmove(this->wnd, a, b);}
+    void move(int, int);
     void refresh(){wrefresh(this->wnd);}
     void clear(){wclear(this->wnd);}
 public:
