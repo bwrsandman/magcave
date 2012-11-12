@@ -1,9 +1,7 @@
 #Magcave
-
-Sandy Carter 1121057
-Zoe Briscoe  9611754
-
 COMP472 Fall 2012
+- Sandy Carter 1121057
+- Zoe Briscoe  9611754
 
 ##Program Function
 
@@ -23,17 +21,17 @@ kernel as well as under Windows using cygwin.
 
 Under Linux or cygwin:
 (You must have the ncurses dev libraries installed)
-    untar:
-        $ tar xfvj magcave-2.tar.bz2
-    compile using make:
-        $ make
-    or compile manually:
-		$ g++ magcave.cpp minimax.cpp gameboard.cpp gameinfo.cpp -I/usr/include/ncurses -lncurses -o magcave
+   - untar:
+    - $ tar xfvj magcave-2.tar.bz2
+   - compile using make:
+     - $ make
+   - or compile manually:
+     - $ g++ magcave.cpp minimax.cpp gameboard.cpp gameinfo.cpp -I/usr/include/ncurses -lncurses -o magcave
 
 ##Running instructions
 
 Under Linux or cygwin:
-    # ./magcave
+   - # ./magcave
 
 ##Keyboard Input
    - q: quits the game
