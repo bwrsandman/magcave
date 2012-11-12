@@ -49,9 +49,11 @@ bool GameInfo::move(int posx, int posy)
 		}		
 	}	
 	if (posindex==-1)
+	{
 		cout << "You have selected an unavailable position" << endl;
 		// *TODO: Actually do something here
 		return false;
+	}
 	
 	//Take the position:	
 	board[position] = player_no;

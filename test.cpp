@@ -2,7 +2,7 @@
 
 int main(int argc, char * argv[])
 {
-	GameInfo test;
+	GameInfo * test = new GameInfo();
 	
 	//check for available positions
 	/**
@@ -87,7 +87,7 @@ int main(int argc, char * argv[])
 	//show board
 	for(int i = 0; i < 64; ++i)
 	{
-		cout << test.board[i];
+		cout << test->board[i];
 		if (i%8 == 7)
 			cout <<endl;
 	}
