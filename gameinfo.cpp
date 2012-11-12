@@ -1,5 +1,10 @@
 #include "gameinfo.h"
 
+/*
+** *TODO: Replace 16, 64 with const
+** Clean up win verification
+**/
+
 GameInfo::GameInfo()
 {	
 	//Fill all available starting positions
@@ -33,7 +38,10 @@ void GameInfo::move(int posx, int posy)
 	int posindex = -1;
 	int position = posx + 8*(posy);
 	
-	//Check that the position is available
+	/* -----------------------------------
+	** Check that a position is available
+	** ----------------------------------
+	***/
 	bool avail = false;
 	for(int i = 0; i < 16; ++i)
 	{
@@ -45,24 +53,132 @@ void GameInfo::move(int posx, int posy)
 	}	
 	if (posindex==-1)
 		cout << "You have selected an unavailable position" << endl;
-		//... take care of it in some way we've decided
+		// *TODO: Actually do something here
 	
-	//Take the position
+	//Take the position:	
 	board[position] = player_no;
 	
-	//Check if it is a winning spot
-	//...
+	/* ----------------------------------------------------------------
+	** Check if this new placement results in a win
+	** Check horizontally, vertically, and diagonally around placement
+	** -----------------------------------------------------------------
+	***/
 	
-	//Update available list
-	//If a spot to the left or right is available, add it
-	if (board[position + 1] == 0)
+	//Check for horizontal win 
+	int wincount = 1;	
+		//Backwards: (position -1 ) * i
+	for(int i = 1; i < 6; ++i)
+	{
+		if ((position - i) < 0 || (position-i)%8 == 7) //don't go outside the range or wrap
+			break;
+		if (board[position-i] == player_no)
+			wincount++;
+		else
+			break; //stop lookin in that direction
+	}
+		//Forwards: (position + 1) * i
+	for(int i = 1; i < 6; ++i)
+	{
+		if ((position + i) > 63 || (position+i)%8 == 0) //don't go outside the range or wrap
+			break;
+		if (board[position+i] == player_no)
+			wincount++;
+		else
+			break;
+	}
+	
+	//Check for vertical win 
+	wincount = 1;	
+		//Downwards: (position - 8*i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position - 8*i) < 0 )//don't go outside the vertical range
+			break;
+		if ((board[position - 8*i] == player_no))
+			wincount++;	
+		else
+			break;
+	}
+		//Upwards: (position + 8) * i) )
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position + 8*i) > 63 )//don't go outside the vertical range
+			break;
+		if ((board[position + 8*i] == player_no))
+			wincount++;	
+		else
+			break;
+	}
+	
+	//Check for diagonal down win 
+	wincount = 1;
+		//Downwards: (position + i + 8*i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position + i + 8*i) > 63 )//don't go outside the board
+			break;
+		if ((board[position + i + 8*i] == player_no))
+			wincount++;	
+		else
+			break;
+	}
+		//Upwards: (position - i - 8*i))
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position - i - 8*i) < 0 )//don't go outside the board
+			break;
+		if ((board[position - i - 8*i] == player_no))
+			wincount++;	
+		else
+			break;
+	}
+	
+	//Check for diagonal up win
+	wincount = 1;
+	
+		//Upwards: (position + i - 8*i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position + i - 8*i) < 0 )//don't go outside the board
+			break;
+		if ((board[position + i - 8*i] == player_no))
+			wincount++;	
+		else
+			break;
+	}
+		//Downwards: (position - i + 8*i)
+	for(int i = 1; i < 6; ++i)
+	{
+		if ( (position - i + 8*i) > 63 )//don't go outside the board
+			break;
+		if ((board[position - i + 8*i] == player_no))
+			wincount++;	
+		else
+			break;
+	}
+	
+	cout << "wincount # " << wincount << endl;
+	
+	if (wincount == 5)
+		cout << "Player # " << player_no << " wins! " << endl;
+	
+	
+	/* ----------------------
+	** Update available list
+	** ----------------------
+	***/
+	//If a spot to the left or right is available, add it (make sure we are not on edge)
+	if ( (position+1)%8 != 0 && board[position + 1] == 0)
 		avail_positions[posindex] = position + 1;
-	else if (board[position - 1] == 0)
-		avail_positions[posindex] = position + -1;
+	else if ( (position-1)%8 != 7	&& board[position - 1] == 0)
+		avail_positions[posindex] = position - 1;
 	else
 		avail_positions[posindex] = -1;
 	
-	//Switch to new player
+	/* ----------------------
+	** Switch to next player
+	** ----------------------
+	***/
 	if (player_no == 1)
 		player_no = 2;
 	else
