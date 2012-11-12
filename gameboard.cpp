@@ -73,7 +73,7 @@ void GameScreen::mainloop(void)
         		this->destroy_window();
 				break;
 			case '\n':
-				if(ginfo->move(gwnd->get_x(), gwnd->get_y()))
+				if(ginfo->move(gwnd->get_x(), gwnd->get_y(), left_turn))
 				{
 					if (ginfo->checkwin(gwnd->get_x(), gwnd->get_y()))
 					{

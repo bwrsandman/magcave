@@ -12,7 +12,7 @@ public:
 	int player_no;
     GameInfo();
     ~GameInfo(void);
-	bool move(int, int);
+	bool move(int, int, bool);
 	bool checkwin(int, int) const;
 	bool check_stalemate(void) const;
 };

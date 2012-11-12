@@ -32,7 +32,7 @@ GameInfo::~GameInfo(void)
 
 }
 
-bool GameInfo::move(int posx, int posy)
+bool GameInfo::move(int posx, int posy, bool left_player)
 {
 	int posindex = -1;
 	int position = getposition(posx, posy);
@@ -41,7 +41,7 @@ bool GameInfo::move(int posx, int posy)
 	** Switch to next player
 	** ----------------------
 	***/
-	player_no ^= 3; /* flip the last 2 bits */
+	player_no = (left_player) ? 1 : 2;
 
 	/* -----------------------------------
 	** Check that a position is available
