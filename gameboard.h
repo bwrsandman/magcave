@@ -24,6 +24,8 @@ public:
     void draw(const GameInfo * const);
 	void movecur(int);
 	void move_to_default(bool);
+	const int get_x(){return cur_x;}
+	const int get_y(){return cur_y;}
 };
 
 class GameScreen

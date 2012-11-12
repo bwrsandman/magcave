@@ -8,7 +8,6 @@ GameScreen::GameScreen(void)
     use_default_colors();
     init_pair(1, -1, COLOR_BLUE);      /* Background                         */
     init_pair(2, COLOR_BLACK, COLOR_WHITE); /* Window                        */
-    //    assume_default_colors(COLOR_WHITE, COLOR_BLUE);
     cbreak();                          /* No waiting for the Enter key       */
     noecho();                          /* No echoing entered keys            */
 	keypad(scr, TRUE);
@@ -74,8 +73,11 @@ void GameScreen::mainloop(void)
         		this->destroy_window();
 				break;
 			case '\n':
-				left_turn ^= true;
-				gwnd->move_to_default(left_turn);
+				if(ginfo->move(gwnd->get_x(), gwnd->get_y()))
+				{
+					left_turn ^= true;
+					gwnd->move_to_default(left_turn);
+				}
 				break;
 			default:
 				this->movecur(ch);
@@ -116,7 +118,29 @@ void GameWindow::draw(const GameInfo * const ginfo)
     /* TODO: Some sort of centering, maybe use printw */
     unsigned int pos = 0;
     char c = 0;
-    /* 1, 1 avoids overwriting the borders */
+	
+	/* Draw the played areas */
+	for(int i = 0; i < 64; ++i)
+	{
+		wmove(this->wnd, (i / 8 + 2) * vscale - 1, (i % 8 + 1) * hscale + 1);
+		//move(i%8, i/8);
+		//move();
+		wdelch(this->wnd);
+		if (ginfo->board[i] == 1)
+		{
+			winsch(this->wnd, 'L');
+		}
+		else if (ginfo->board[i] == 2)
+		{
+			winsch(this->wnd, 'R');
+		}
+		else
+		{
+			winsch(this->wnd, ' ');
+		}
+	}
+    
+	/* 1, 1 avoids overwriting the borders */
     for(int i = 0; i < width; ++i)
     {
         pos = 1 + (i + 1) * hscale;
@@ -154,6 +178,8 @@ void GameWindow::draw(const GameInfo * const ginfo)
     {
         mvwchgat(this->wnd, i, 0, -1, 0, 2, NULL);
     }
+
+
     wattron(this->wnd, COLOR_PAIR(2));
     wattron(this->wnd, A_BOLD); 
     box(this->wnd, 0, 0);             /* 0, 0 gives default characters for
