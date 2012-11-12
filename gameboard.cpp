@@ -75,8 +75,22 @@ void GameScreen::mainloop(void)
 			case '\n':
 				if(ginfo->move(gwnd->get_x(), gwnd->get_y()))
 				{
+					if (ginfo->checkwin(gwnd->get_x(), gwnd->get_y()))
+					{
+						move(1,2);
+						printw("%s player's has won!    ", (left_turn)?"Left":"Right");
+						move(2,2);
+						printw("Press any key to continue...");
+						ch = getch();
+						done = true;
+					}
 					left_turn ^= true;
 					gwnd->move_to_default(left_turn);
+				}
+				else
+				{
+					// TODO: Some sort of notification that this is an illigal move.
+					//       OR make the player lose.
 				}
 				break;
 			default:
