@@ -25,13 +25,13 @@ Under Linux or cygwin:
     - $ tar xfvj magcave-2.tar.bz2
    - compile using make:
      - $ make
-   - or compile manually:
-     - $ g++ magcave.cpp minimax.cpp gameboard.cpp gameinfo.cpp -I/usr/include/ncurses -lncurses -o magcave
+     - or compile manually:
+       - $ g++ magcave.cpp minimax.cpp gameboard.cpp gameinfo.cpp -I/usr/include/ncurses -lncurses -o magcave
 
 ##Running instructions
 
 Under Linux or cygwin:
-   - # ./magcave
+   - $ ./magcave
 
 ##Keyboard Input
    - q: quits the game
