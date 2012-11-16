@@ -82,7 +82,7 @@ bool GameInfo::move(int posx, int posy, bool left_player)
 			
 }
 
-bool GameInfo::checkwin(int posx, int posy) const
+char GameInfo::checkwin(int posx, int posy) const
 {
 	/* ----------------------------------------------------------------
 	** Check if this new placement results in a win
@@ -114,7 +114,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	if (wincount == 5)
 	{
 		std::cout << "Player # " <<  int(player_no) << " wins " << " by horizontal!" << std::endl;
-		return true;
+		return WIN_BY_HORIZONTAL;
 	}
 
 	//Check for vertical win 
@@ -139,7 +139,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	if (wincount == 5)
 	{
 		std::cout << "Player # " << int(player_no) << " wins " << " by vertical!" << std::endl;
-		return true;
+		return WIN_BY_VERTICAL;
 	}
 
 	//Check for diagonal down win 
@@ -164,7 +164,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	if (wincount == 5)
 	{
 		std::cout << "Player # " << int(player_no) << " wins " << " by downward diagonal!" << std::endl;
-		return true;
+		return WIN_BY_BDIAGONAL;
 	}
 	
 	//Check for diagonal up win
@@ -189,7 +189,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	if (wincount == 5)
 	{
 		std::cout << "Player # " << int(player_no) << " wins " << " by upward diagonal!" << std::endl;
-		return true;
+		return WIN_BY_FDIAGONAL;
 	}
 
 	/* All tests have failed */
