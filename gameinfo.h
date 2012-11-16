@@ -1,3 +1,6 @@
+#ifndef GAMEINFO_H
+#define GAMEINFO_H
+
 const char WIN_BY_HORIZONTAL = 0x1;
 const char WIN_BY_VERTICAL = 0x2;
 const char WIN_BY_FDIAGONAL = 0x3;
@@ -19,3 +22,4 @@ public:
 	char checkwin(int, int) const;
 	bool check_stalemate(void) const;
 };
+#endif
