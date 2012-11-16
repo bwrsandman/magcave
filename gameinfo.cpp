@@ -76,7 +76,31 @@ bool GameInfo::move(int posx, int posy, bool left_player)
 		avail_positions[posindex] = -1;
 	
 	return true;
-			
+}
+
+bool GameInfo::checkline(int pos, int mul) const
+{
+	int wincount = 1;
+	int position = pos;
+	// Backwards
+	for(int i = 1; i < 6; ++i)
+	{
+		position = pos - mul * i;
+		if(position < 0 || get_board_at(position) != player_no)
+			break;
+		else
+			++wincount;
+	}
+	// Forwards
+	for(int i = 1; i < 6; ++i)
+	{
+		position = pos + mul * i;
+		if(position > 63 || get_board_at(position) != player_no)
+			break;
+		else
+			++wincount;
+	}
+	return wincount >= 5;
 }
 
 char GameInfo::checkwin(int posx, int posy) const
@@ -90,97 +114,25 @@ char GameInfo::checkwin(int posx, int posy) const
 	int position = getposition(posx, posy);
 	
 	//Check for horizontal win 
-	int wincount = 1;	
-	//Backwards: (position -1 * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ((position - i) < 0 || (position-i)%8 == 7 || board[position-i] != player_no) //don't go outside the range or wrap
-			break;
-		else
-			wincount++;
-	}
-	//Forwards: (position + 1 * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ((position + i) > 63 || (position+i)%8 == 0 || board[position+i] != player_no) //don't go outside the range or wrap
-			break;
-		else
-			wincount++;
-	}
-	
-	if (wincount == 5)
+	if (checkline(position, 1))
 	{
 		return WIN_BY_HORIZONTAL;
 	}
 
 	//Check for vertical win 
-	wincount = 1;	
-	// Upwards: ( (position - 8) * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position - 8*i) < 0 || board[position - 8*i] != player_no)//don't go outside the vertical range
-			break;
-		else
-			wincount++;	
-	}
-	//Downwards: ( (position + 8) * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position + 8*i) > 63 || board[position + 8*i] != player_no)//don't go outside the vertical range
-			break;
-		else
-			wincount++;	
-	}
-	
-	if (wincount == 5)
+	if (checkline(position, 8))
 	{
 		return WIN_BY_VERTICAL;
 	}
 
 	//Check for diagonal down win 
-	wincount = 1;
-	//Downwards: (position + 9 * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position + 9 * i) > 63 || board[position + 9 * i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;	
-	}
-	//Upwards: (position - 9 * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position - 9 * i) < 0 || board[position - 9 * i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;	
-	}
-	
-	if (wincount == 5)
+	if (checkline(position, 9))
 	{
 		return WIN_BY_BDIAGONAL;
 	}
 	
 	//Check for diagonal up win
-	wincount = 1;	
-	//Upwards: (position - 7 * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position -7 * i) < 0 || board[position - 7 * i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;
-	}
-	//Downwards: (position + 7 * i)
-	for(int i = 1; i < 6; ++i)
-	{
-		if ( (position + 7 * i) > 63 || board[position + 7 * i] != player_no)//don't go outside the board
-			break;
-		else
-			wincount++;	
-	}
-	
-	if (wincount == 5)
+	if (checkline(position, 6))
 	{
 		return WIN_BY_FDIAGONAL;
 	}
