@@ -77,6 +77,7 @@ void GameScreen::mainloop(void)
 				{
 					if ((ch = ginfo->checkwin(gwnd->get_x(), gwnd->get_y())))
 					{
+						this->draw();
 						move(1,2);
 						printw("%s player's has won by %s!    ", PLAYER_LABELS[!left_turn&1], WIN_LABELS[ch]);
         				mvchgat(1, 0, -1, 0, 1, NULL);
@@ -88,6 +89,7 @@ void GameScreen::mainloop(void)
 					}
 					else if (ginfo->check_stalemate())
 					{
+						this->draw();
 						move(1,2);
 						printw("STALEMATE              ");
        					mvchgat(1, 0, -1, 0, 1, NULL);
