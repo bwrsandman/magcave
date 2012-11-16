@@ -4,6 +4,9 @@
 #include <ncurses.h>
 #include "gameinfo.h"
 
+const char * const PLAYER_LABELS[] = {"Left", "Right"};
+const char * const WIN_LABELS[] = {"", "horizontal", "vertical", "forward diagonal", "backward diagonal"};
+
 class GameWindow
 {
 	const unsigned int sz_x, sz_y;

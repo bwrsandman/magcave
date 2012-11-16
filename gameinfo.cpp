@@ -1,4 +1,3 @@
-#include <iostream>  // TODO: Do away with this
 #include "gameinfo.h"
 
 /*
@@ -58,8 +57,6 @@ bool GameInfo::move(int posx, int posy, bool left_player)
 	}	
 	if (posindex==-1)
 	{
-		std::cout << "You have selected an unavailable position" << std::endl;
-		// *TODO: Actually do something here
 		return false;
 	}
 	
@@ -113,7 +110,6 @@ char GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		std::cout << "Player # " <<  int(player_no) << " wins " << " by horizontal!" << std::endl;
 		return WIN_BY_HORIZONTAL;
 	}
 
@@ -138,7 +134,6 @@ char GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		std::cout << "Player # " << int(player_no) << " wins " << " by vertical!" << std::endl;
 		return WIN_BY_VERTICAL;
 	}
 
@@ -163,7 +158,6 @@ char GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		std::cout << "Player # " << int(player_no) << " wins " << " by downward diagonal!" << std::endl;
 		return WIN_BY_BDIAGONAL;
 	}
 	
@@ -188,7 +182,6 @@ char GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		std::cout << "Player # " << int(player_no) << " wins " << " by upward diagonal!" << std::endl;
 		return WIN_BY_FDIAGONAL;
 	}
 

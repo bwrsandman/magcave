@@ -43,7 +43,7 @@ void GameScreen::draw(void)
 {
     getmaxyx(this->scr, this->height, this->width);
     move(1,2);
-	printw("%s player's turn.    ", (left_turn)?"Left":"Right");
+	printw("%s player's turn.    ",PLAYER_LABELS[!left_turn&1]); 
     /* Fill background color */
     for(unsigned int i = 0; i < this->height; ++i)
     {
@@ -75,21 +75,25 @@ void GameScreen::mainloop(void)
 			case '\n':
 				if(ginfo->move(gwnd->get_x(), gwnd->get_y(), left_turn))
 				{
-					if (ginfo->checkwin(gwnd->get_x(), gwnd->get_y()))
+					if ((ch = ginfo->checkwin(gwnd->get_x(), gwnd->get_y())))
 					{
 						move(1,2);
-						printw("%s player's has won!    ", (left_turn)?"Left":"Right");
+						printw("%s player's has won by %s!    ", PLAYER_LABELS[!left_turn&1], WIN_LABELS[ch]);
+        				mvchgat(1, 0, -1, 0, 1, NULL);
 						move(2,2);
 						printw("Press any key to continue...");
+       					mvchgat(2, 0, -1, 0, 1, NULL);
 						ch = getch();
 						done = true;
 					}
-					if (ginfo->check_stalemate())
+					else if (ginfo->check_stalemate())
 					{
 						move(1,2);
 						printw("STALEMATE              ");
+       					mvchgat(1, 0, -1, 0, 1, NULL);
 						move(2,2);
 						printw("Press any key to continue...");
+       					mvchgat(2, 0, -1, 0, 1, NULL);
 						ch = getch();
 						done = true;
 					}
@@ -146,17 +150,11 @@ void GameWindow::draw(const GameInfo * const ginfo)
 	for(int i = 0; i < 64; ++i)
 	{
 		wmove(this->wnd, (i / 8 + 2) * vscale - 1, (i % 8 + 1) * hscale + 1);
-		//move(i%8, i/8);
-		//move();
 		wdelch(this->wnd);
 		c = ginfo->get_board_at(i);
-		if (c == 1)
+		if (c == 1 || c == 2)
 		{
-			winsch(this->wnd, 'L');
-		}
-		else if (c == 2)
-		{
-			winsch(this->wnd, 'R');
+			winsch(this->wnd, PLAYER_LABELS[c-1][0]); 
 		}
 		else
 		{
