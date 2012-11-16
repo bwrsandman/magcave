@@ -149,11 +149,12 @@ void GameWindow::draw(const GameInfo * const ginfo)
 		//move(i%8, i/8);
 		//move();
 		wdelch(this->wnd);
-		if (ginfo->board[i] == 1)
+		c = ginfo->get_board_at(i);
+		if (c == 1)
 		{
 			winsch(this->wnd, 'L');
 		}
-		else if (ginfo->board[i] == 2)
+		else if (c == 2)
 		{
 			winsch(this->wnd, 'R');
 		}
