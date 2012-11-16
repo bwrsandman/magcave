@@ -1,14 +1,9 @@
-#include <iostream>
-#include <utility>
-#include <string>
-using namespace std;
-
 class GameInfo
 {	
 	int getposition(int x, int y) const {return x + 8 * y;}
 	char avail_positions[16];
 	char board[64];
-	char player_no;
+	unsigned char player_no;
 public:
     GameInfo();
     ~GameInfo(void);

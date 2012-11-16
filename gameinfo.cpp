@@ -1,3 +1,4 @@
+#include <iostream>  // TODO: Do away with this
 #include "gameinfo.h"
 
 /*
@@ -57,7 +58,7 @@ bool GameInfo::move(int posx, int posy, bool left_player)
 	}	
 	if (posindex==-1)
 	{
-		cout << "You have selected an unavailable position" << endl;
+		std::cout << "You have selected an unavailable position" << std::endl;
 		// *TODO: Actually do something here
 		return false;
 	}
@@ -112,7 +113,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		cout << "Player # " << player_no << " wins " << " by horizontal!" << endl;
+		std::cout << "Player # " <<  int(player_no) << " wins " << " by horizontal!" << std::endl;
 		return true;
 	}
 
@@ -137,7 +138,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		cout << "Player # " << player_no << " wins " << " by vertical!" << endl;
+		std::cout << "Player # " << int(player_no) << " wins " << " by vertical!" << std::endl;
 		return true;
 	}
 
@@ -162,7 +163,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		cout << "Player # " << player_no << " wins " << " by downward diagonal!" << endl;
+		std::cout << "Player # " << int(player_no) << " wins " << " by downward diagonal!" << std::endl;
 		return true;
 	}
 	
@@ -187,7 +188,7 @@ bool GameInfo::checkwin(int posx, int posy) const
 	
 	if (wincount == 5)
 	{
-		cout << "Player # " << player_no << " wins " << " by upward diagonal!" << endl;
+		std::cout << "Player # " << int(player_no) << " wins " << " by upward diagonal!" << std::endl;
 		return true;
 	}
 
