@@ -112,29 +112,15 @@ char GameInfo::checkwin(int posx, int posy) const
 	***/
 
 	int position = getposition(posx, posy);
+	char mults[4] = {1, 8, 6, 9};
 	
-	//Check for horizontal win 
-	if (checkline(position, 1))
+	// Check for win
+	for(int i = 0; i < 4; ++i)
 	{
-		return WIN_BY_HORIZONTAL;
-	}
-
-	//Check for vertical win 
-	if (checkline(position, 8))
-	{
-		return WIN_BY_VERTICAL;
-	}
-
-	//Check for diagonal down win 
-	if (checkline(position, 9))
-	{
-		return WIN_BY_BDIAGONAL;
-	}
-	
-	//Check for diagonal up win
-	if (checkline(position, 6))
-	{
-		return WIN_BY_FDIAGONAL;
+		if (checkline(position, mults[i]))
+		{
+			return 1 + i;
+		}
 	}
 
 	/* All tests have failed */
