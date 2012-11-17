@@ -22,5 +22,13 @@ public:
 	char checkwin(int, int) const;
 	bool check_stalemate(void) const;
 };
-bool checkline(const GameInfo * const, int, int);
+
+struct line_checker
+{
+	const GameInfo * const game;
+	const char pos:6;
+	const char mul:4;
+};
+
+bool* checkline(struct line_checker*);
 #endif

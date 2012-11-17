@@ -79,15 +79,15 @@ bool GameInfo::move(int posx, int posy, bool left_player)
 }
 
 // TODO: Fix forward diagonal
-bool checkline(const GameInfo * const game, int pos, int mul)
+bool *checkline(struct line_checker * lnchk)
 {
 	int wincount = 1;
-	int position = pos;
+	int position = lnchk->pos;
 	// Backwards
 	for(int i = 1; i < 6; ++i)
 	{
-		position = pos - mul * i;
-		if(position < 0 || game->get_board_at(position) != game->get_player_no())
+		position = lnchk->pos - lnchk->mul * i;
+		if(position < 0 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
 			++wincount;
@@ -95,13 +95,13 @@ bool checkline(const GameInfo * const game, int pos, int mul)
 	// Forwards
 	for(int i = 1; i < 6; ++i)
 	{
-		position = pos + mul * i;
-		if(position > 63 || game->get_board_at(position) != game->get_player_no())
+		position = lnchk->pos + lnchk->mul * i;
+		if(position > 63 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
 			++wincount;
 	}
-	return wincount >= 5;
+	return new bool(wincount >= 5);
 }
 
 char GameInfo::checkwin(int posx, int posy) const
