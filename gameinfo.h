@@ -9,26 +9,27 @@ const char WIN_BY_BDIAGONAL = 0x4;
 class GameInfo
 {	
 private:
-	int getposition(int x, int y) const {return x + 8 * y;}
-	char avail_positions[16];
-	char board[64];
+	unsigned char getposition(unsigned char x, unsigned char y) const {return x + 8 * y;}
+	signed char avail_positions[16];
+	unsigned char board[64];
 	unsigned char player_no;
 public:
     GameInfo();
     ~GameInfo(void);
-	const char get_board_at(int i) const {return board[i];}
-	const char get_player_no() const     {return player_no;}
-	bool move(int, int, bool);
-	char checkwin(int, int) const;
+    const unsigned char get_board_at(unsigned char i)const {return board[i];}
+	const unsigned char get_player_no() const     {return player_no;}
+	bool move(unsigned char, unsigned char, bool);
+	unsigned char checkwin(unsigned char, unsigned char) const;
 	bool check_stalemate(void) const;
 };
 
 struct line_checker
 {
 	const GameInfo * const game;
-	const char pos;
-	const char mul;
+	const unsigned char pos;
+	const unsigned char mul;
 };
 
 bool* checkline(struct line_checker*);
+
 #endif
