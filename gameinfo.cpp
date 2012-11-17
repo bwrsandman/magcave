@@ -118,7 +118,8 @@ char GameInfo::checkwin(int posx, int posy) const
 	// Check for win
 	for(int i = 0; i < 4; ++i)
 	{
-		if (checkline(this, position, mults[i]))
+		struct line_checker c = {this, char(position), mults[i]};
+		if (*checkline(&c))
 		{
 			return 1 + i;
 		}

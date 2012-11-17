@@ -26,8 +26,8 @@ public:
 struct line_checker
 {
 	const GameInfo * const game;
-	const char pos:6;
-	const char mul:4;
+	const char pos;
+	const char mul;
 };
 
 bool* checkline(struct line_checker*);
