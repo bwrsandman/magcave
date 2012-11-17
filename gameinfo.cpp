@@ -112,7 +112,7 @@ char GameInfo::checkwin(int posx, int posy) const
 	***/
 
 	int position = getposition(posx, posy);
-	char mults[4] = {1, 8, 6, 9};
+	char mults[4] = {1, 8, 7, 9};
 	
 	// Check for win
 	for(int i = 0; i < 4; ++i)
