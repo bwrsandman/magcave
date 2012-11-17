@@ -119,7 +119,10 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 	for(unsigned char i = 0; i < 4; ++i)
 	{
 		struct line_checker c = {this, (unsigned char)(position), mults[i]};
-		if (*checkline(&c))
+		bool* pchk = checkline(&c);
+		bool chk = *pchk;
+		delete(pchk); pchk = 0; /* Free memory */
+		if (chk)
 		{
 			return 1 + i;
 		}
