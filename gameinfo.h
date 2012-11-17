@@ -13,13 +13,14 @@ private:
 	char avail_positions[16];
 	char board[64];
 	unsigned char player_no;
-	bool checkline(int, int) const;
 public:
     GameInfo();
     ~GameInfo(void);
-	const char get_board_at(int i)const {return board[i];}
+	const char get_board_at(int i) const {return board[i];}
+	const char get_player_no() const     {return player_no;}
 	bool move(int, int, bool);
 	char checkwin(int, int) const;
 	bool check_stalemate(void) const;
 };
+bool checkline(const GameInfo * const, int, int);
 #endif
