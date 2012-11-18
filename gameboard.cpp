@@ -68,7 +68,6 @@ void GameScreen::mainloop(void)
 		ch = getch();				   /* Read keyboard input                */
 		switch(ch)
 		{
-			case KEY_MOUSE:
 			case 'q':                  /* Press q to exit                    */
 				done = true;
 				break;
@@ -111,8 +110,12 @@ void GameScreen::mainloop(void)
 					//       OR make the player lose.
 				}
 				break;
+			case KEY_MOUSE:
+				this->mousemove(ch);
+				break;
 			default:
 				this->movecur(ch);
+				break;
 		}
 		this->draw();
     }
@@ -122,6 +125,12 @@ void GameScreen::movecur(int ch)
 {
     if(gwnd)
         gwnd->movecur(ch);
+}
+
+void GameScreen::mousemove(int ch)
+{
+	if(gwnd)
+		gwnd->mousemove(ch);
 }
 
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
@@ -267,5 +276,20 @@ void GameWindow::movecur(int ch)
 		case 'D':
 			this->move(1, 0);
 			break;			
+	}
+}
+
+void GameWindow::mousemove(int ch)
+{
+	MEVENT event;
+	if(getmouse(&event) != OK)
+		return;
+	if(event.bstate & BUTTON1_DOUBLE_CLICKED)
+	{
+			this->move(-1, 0);
+	}
+	else if(event.bstate & BUTTON1_CLICKED)
+	{
+			this->move(1, 0);
 	}
 }
