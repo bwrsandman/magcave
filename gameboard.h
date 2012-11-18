@@ -26,7 +26,7 @@ public:
     ~GameWindow(void);
     void draw(const GameInfo * const);
 	void movecur(int);
-	void mousemove(int);
+	bool mousemove(int);
 	void move_to_default(bool);
 	const int get_x(){return cur_x;}
 	const int get_y(){return cur_y;}
@@ -51,7 +51,7 @@ public:
     void draw(void);
     void mainloop(void);
 	void movecur(int);
-	void mousemove(int);
+	bool mousemove(int);
 };
 
 #endif

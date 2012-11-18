@@ -74,6 +74,9 @@ void GameScreen::mainloop(void)
 			case 'k':
         		this->destroy_window();
 				break;
+			case KEY_MOUSE:
+				if (!this->mousemove(ch))
+					break;
 			case '\n':
 				if(ginfo->move(gwnd->get_x(), gwnd->get_y(), left_turn))
 				{
@@ -110,9 +113,6 @@ void GameScreen::mainloop(void)
 					//       OR make the player lose.
 				}
 				break;
-			case KEY_MOUSE:
-				this->mousemove(ch);
-				break;
 			default:
 				this->movecur(ch);
 				break;
@@ -127,10 +127,9 @@ void GameScreen::movecur(int ch)
         gwnd->movecur(ch);
 }
 
-void GameScreen::mousemove(int ch)
+bool GameScreen::mousemove(int ch)
 {
-	if(gwnd)
-		gwnd->mousemove(ch);
+	return gwnd && gwnd->mousemove(ch);
 }
 
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
@@ -279,21 +278,26 @@ void GameWindow::movecur(int ch)
 	}
 }
 
-void GameWindow::mousemove(int ch)
+bool GameWindow::mousemove(int ch)
 {
 	MEVENT event;
 	if(getmouse(&event) != OK)
-		return;
+		return false;
+	/* Find corresponding location on game grid */
 	int play_x = (event.x + 1 - hpad - 5) / hscale;
 	int play_y = (event.y + 1 - vpad - 3) / vscale;
+
 	if(play_x < 0 || play_y < 0 || play_x >= width || play_y >= height)
-		return;
-	if(event.bstate & BUTTON1_DOUBLE_CLICKED)
+		return false;
+
+	/* Move cursor */
+	if(event.bstate & BUTTON1_CLICKED || event.bstate & BUTTON1_DOUBLE_CLICKED)
 	{
-			printw("%d, %d       ", play_x, play_y);
+		cur_x = play_x;
+		cur_y = play_y;
 	}
-	else if(event.bstate & BUTTON1_CLICKED)
-	{
-			printw("%d, %d       ", play_x, play_y);
-	}
+	
+	/* Place move */
+	return event.bstate & BUTTON1_DOUBLE_CLICKED;
+
 }
