@@ -78,8 +78,9 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 	return true;
 }
 
-bool *checkline(struct line_checker * lnchk)
+void *checkline(void *plnchk)
 {
+	struct line_checker *lnchk = (struct line_checker*) plnchk;
 	char wincount = 1;
 	unsigned char position = lnchk->pos;
 	
@@ -101,7 +102,7 @@ bool *checkline(struct line_checker * lnchk)
 		else
 			++wincount;
 	}
-	return new bool(wincount >= 5);
+	return (void *) new bool(wincount >= 5);
 }
 
 unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
@@ -119,7 +120,7 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 	for(unsigned char i = 0; i < 4; ++i)
 	{
 		struct line_checker c = {this, (unsigned char)(position), mults[i]};
-		bool* pchk = checkline(&c);
+		bool* pchk = (bool *) checkline(&c);
 		bool chk = *pchk;
 		delete(pchk); pchk = 0; /* Free memory */
 		if (chk)

@@ -30,6 +30,6 @@ struct line_checker
 	const unsigned char mul;
 };
 
-bool* checkline(struct line_checker*);
+void* checkline(void*);
 
 #endif
