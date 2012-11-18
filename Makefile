@@ -4,7 +4,7 @@ HEADERS=minimax.h gameboard.h gameinfo.h
 NAME=magcave
 OUTPUT=-o ${NAME}
 INCLUDE=-I/usr/include/ncurses
-LINKER=-lncurses
+LINKER=-lncurses -lpthread
 WARN=-Wall
 
 all: ${SOURCE} ${HEADERS}

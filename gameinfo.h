@@ -1,6 +1,8 @@
 #ifndef GAMEINFO_H
 #define GAMEINFO_H
 
+#include <pthread.h>
+
 const char WIN_BY_HORIZONTAL = 0x1;
 const char WIN_BY_VERTICAL = 0x2;
 const char WIN_BY_FDIAGONAL = 0x3;
@@ -13,6 +15,7 @@ private:
 	signed char avail_positions[16];
 	unsigned char board[64];
 	unsigned char player_no;
+	mutable pthread_t threads[4];				/* For running 4 line checks in parallel*/
 public:
     GameInfo();
     ~GameInfo(void);

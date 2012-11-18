@@ -1,3 +1,6 @@
+#include <iostream>
+#include <unistd.h>
+#include <assert.h>
 #include "gameinfo.h"
 
 /*
@@ -123,22 +126,30 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 
 	unsigned char position = getposition(posx, posy);
 	unsigned char mults[4] = {1, 8, 7, 9};
-	
-	// Check for win
+	unsigned char ret = false;
+	int rc;
+
+	// Scatter
 	for(unsigned char i = 0; i < 4; ++i)
 	{
 		LineChecker *c = new LineChecker(this, (unsigned char)(position), mults[i]);
-		bool* pchk = (bool *) checkline(c);
-		bool chk = *pchk;
-		delete(pchk); pchk = 0; /* Free memory */
-		if (chk)
-		{
-			return 1 + i;
-		}
+		rc = pthread_create(&threads[i], NULL, checkline, c);
+		assert(rc == 0);
 	}
 
-	/* All tests have failed */
-	return false;
+	// Gather: Check for win
+	for(unsigned char i = 0; i < 4; ++i)
+	{
+		bool* pchk; rc = pthread_join(threads[i], (void **) &pchk);
+		assert(rc == 0);
+		if(*pchk)
+		{
+			ret = 1 + i;
+		}
+		delete(pchk); pchk = 0; /* Free memory */
+	}
+
+	return ret;
 }
 
 bool GameInfo::check_stalemate(void) const
