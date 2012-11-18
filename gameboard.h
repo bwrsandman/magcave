@@ -41,7 +41,6 @@ class GameScreen
     void move(unsigned int a, unsigned int b) const {wmove(this->scr, a, b);}
     void refresh() const {wrefresh(this->scr);}
     void clear() const {wclear(this->scr);}
-	//Player * left_player, * right_player;
 	bool left_turn;
 
 public:

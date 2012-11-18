@@ -284,12 +284,16 @@ void GameWindow::mousemove(int ch)
 	MEVENT event;
 	if(getmouse(&event) != OK)
 		return;
+	int play_x = (event.x + 1 - hpad - 5) / hscale;
+	int play_y = (event.y + 1 - vpad - 3) / vscale;
+	if(play_x < 0 || play_y < 0 || play_x >= width || play_y >= height)
+		return;
 	if(event.bstate & BUTTON1_DOUBLE_CLICKED)
 	{
-			this->move(-1, 0);
+			printw("%d, %d       ", play_x, play_y);
 	}
 	else if(event.bstate & BUTTON1_CLICKED)
 	{
-			this->move(1, 0);
+			printw("%d, %d       ", play_x, play_y);
 	}
 }
