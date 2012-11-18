@@ -5,6 +5,13 @@
 ** Actually have something happen if a player wins or picks an invalid location
 **/
 
+LineChecker::LineChecker(const GameInfo * const g, const unsigned char p, const unsigned char m)
+	: game(g)
+	, pos(p)
+	, mul(m)
+{
+}
+
 GameInfo::GameInfo()
 {	
 	//Fill all available starting positions
@@ -80,7 +87,7 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 
 void *checkline(void *plnchk)
 {
-	struct line_checker *lnchk = (struct line_checker*) plnchk;
+	LineChecker *lnchk = (LineChecker*) plnchk;
 	char wincount = 1;
 	unsigned char position = lnchk->pos;
 	
@@ -102,6 +109,7 @@ void *checkline(void *plnchk)
 		else
 			++wincount;
 	}
+	delete(lnchk); lnchk = 0; /* Free memory */
 	return (void *) new bool(wincount >= 5);
 }
 
@@ -119,8 +127,8 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 	// Check for win
 	for(unsigned char i = 0; i < 4; ++i)
 	{
-		struct line_checker c = {this, (unsigned char)(position), mults[i]};
-		bool* pchk = (bool *) checkline(&c);
+		LineChecker *c = new LineChecker(this, (unsigned char)(position), mults[i]);
+		bool* pchk = (bool *) checkline(c);
 		bool chk = *pchk;
 		delete(pchk); pchk = 0; /* Free memory */
 		if (chk)

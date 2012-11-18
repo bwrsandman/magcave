@@ -23,11 +23,13 @@ public:
 	bool check_stalemate(void) const;
 };
 
-struct line_checker
+class LineChecker
 {
+public:
 	const GameInfo * const game;
 	const unsigned char pos;
 	const unsigned char mul;
+	LineChecker(const GameInfo * const g, const unsigned char p, const unsigned char m);
 };
 
 void* checkline(void*);
