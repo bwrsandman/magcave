@@ -92,13 +92,15 @@ void *checkline(void *plnchk)
 {
 	LineChecker *lnchk = (LineChecker*) plnchk;
 	char wincount = 1;
-	unsigned char position = lnchk->pos;
+	signed char position = lnchk->pos;
+	unsigned char mod = 8 * mults[lnchk->mul];
 	
 	// Backwards
 	for(char i = 1; i < 6; ++i)
 	{
 		position = lnchk->pos - mults[lnchk->mul] * i;
-		if(position < 0 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
+		if(position < 0 || position % mod > lnchk->pos % mod ||
+		   lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
 			++wincount;
@@ -107,7 +109,8 @@ void *checkline(void *plnchk)
 	for(char i = 1; i < 6; ++i)
 	{
 		position = lnchk->pos + mults[lnchk->mul] * i;
-		if(position > 63 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
+		if(position > 63 || position % mod < lnchk->pos % mod ||
+		   lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
 			++wincount;
