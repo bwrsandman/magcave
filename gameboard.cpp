@@ -11,6 +11,8 @@ GameScreen::GameScreen(void)
     cbreak();                          /* No waiting for the Enter key       */
     noecho();                          /* No echoing entered keys            */
 	keypad(scr, TRUE);
+	/* Listen for left click and left double click */
+	mousemask(BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED, NULL); 
     clear();                           /* Clear screen                       */
 
 	this->ginfo = new GameInfo();      /* Initialize game rules              */
@@ -66,6 +68,7 @@ void GameScreen::mainloop(void)
 		ch = getch();				   /* Read keyboard input                */
 		switch(ch)
 		{
+			case KEY_MOUSE:
 			case 'q':                  /* Press q to exit                    */
 				done = true;
 				break;
