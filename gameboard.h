@@ -14,8 +14,8 @@ class GameWindow
     const static unsigned char width = 8;
     const static unsigned char height = 8;
     const static unsigned char hscale = 5, vscale = 2, hpad = 25, vpad = 5;
-    const unsigned int max_x, max_y;
-	unsigned int cur_x, cur_y;
+    const unsigned char max_x:4, max_y:4;
+	unsigned char cur_x:4, cur_y:4;
     void move(void) const;
     void move(int, int);
     void refresh(){wrefresh(this->wnd);}

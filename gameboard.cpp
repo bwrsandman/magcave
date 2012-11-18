@@ -122,7 +122,7 @@ void GameScreen::movecur(int ch)
 }
 
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
-	:sz_x((width + 1) * hscale + 3) 
+	: sz_x((width + 1) * hscale + 3) 
 	, sz_y((height + 1) * vscale + 3)
 	, wnd(newwin(sz_y, sz_x, 
                  vpad - 1, hpad - 1))

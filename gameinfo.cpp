@@ -97,7 +97,7 @@ void *checkline(void *plnchk)
 	// Backwards
 	for(char i = 1; i < 6; ++i)
 	{
-		position = lnchk->pos - lnchk->mul * i;
+		position = lnchk->pos - mults[lnchk->mul] * i;
 		if(position < 0 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
@@ -106,7 +106,7 @@ void *checkline(void *plnchk)
 	// Forwards
 	for(char i = 1; i < 6; ++i)
 	{
-		position = lnchk->pos + lnchk->mul * i;
+		position = lnchk->pos + mults[lnchk->mul] * i;
 		if(position > 63 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
@@ -125,7 +125,6 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 	***/
 
 	unsigned char position = getposition(posx, posy);
-	unsigned char mults[4] = {1, 8, 7, 9};
 	unsigned char ret = false;
 	int rc;
 
@@ -135,7 +134,7 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 		assert(pthread_create(&threads[i], 
 					          NULL, 
 							  checkline, 
-							  new LineChecker(this, (unsigned char)position, mults[i])) 
+							  new LineChecker(this, (unsigned char)position, i)) 
 				== 0);
 	}
 
