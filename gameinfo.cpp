@@ -132,16 +132,18 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 	// Scatter
 	for(unsigned char i = 0; i < 4; ++i)
 	{
-		LineChecker *c = new LineChecker(this, (unsigned char)(position), mults[i]);
-		rc = pthread_create(&threads[i], NULL, checkline, c);
-		assert(rc == 0);
+		assert(pthread_create(&threads[i], 
+					          NULL, 
+							  checkline, 
+							  new LineChecker(this, (unsigned char)position, mults[i])) 
+				== 0);
 	}
 
 	// Gather: Check for win
 	for(unsigned char i = 0; i < 4; ++i)
 	{
-		bool* pchk; rc = pthread_join(threads[i], (void **) &pchk);
-		assert(rc == 0);
+		bool* pchk; 
+		assert(rc = pthread_join(threads[i], (void **) &pchk) == 0);
 		if(*pchk)
 		{
 			ret = 1 + i;
