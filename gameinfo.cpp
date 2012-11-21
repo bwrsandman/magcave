@@ -93,24 +93,27 @@ void *checkline(void *plnchk)
 	LineChecker *lnchk = (LineChecker*) plnchk;
 	char wincount = 1;
 	signed char position = lnchk->pos;
-	unsigned char mod = 8 * mults[lnchk->mul];
 	
 	// Backwards
-	for(char i = 1; i < 6; ++i)
+	for(char i = 1; i < 5; ++i)
 	{
 		position = lnchk->pos - mults[lnchk->mul] * i;
-		if(position < 0 || position % mod > lnchk->pos % mod ||
-		   lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
+		if( (lnchk->mul == 0 && position % 8 == 7) || (lnchk->mul == 1 && position > lnchk->pos) ||
+			(lnchk->mul == 2 && position % 8 == 0) || (lnchk->mul == 3 && position % 8 == 7) )
+			break;
+		else if(position < 0 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
 			++wincount;
 	}
 	// Forwards
-	for(char i = 1; i < 6; ++i)
+	for(char i = 1; i < 5; ++i)
 	{
 		position = lnchk->pos + mults[lnchk->mul] * i;
-		if(position > 63 || position % mod < lnchk->pos % mod ||
-		   lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
+		if( (lnchk->mul == 0 && position % 8 == 0) || (lnchk->mul == 1 && position < lnchk->pos) ||
+			(lnchk->mul == 2 && position % 8 == 7) || (lnchk->mul == 3 && position % 8 == 0) )
+			break;
+		else if(position > 63 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
 			break;
 		else
 			++wincount;

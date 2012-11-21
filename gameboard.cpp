@@ -1,4 +1,5 @@
 #include "gameboard.h"
+#include "minimax.h"
 
 GameScreen::GameScreen(void)
     : scr(initscr())                   /* Initialize screen                  */
@@ -103,6 +104,14 @@ void GameScreen::mainloop(void)
        					mvchgat(2, 0, -1, 0, 1, NULL);
 						ch = getch();
 						done = true;
+					}
+					else
+					{
+						this->draw();
+						MinimaxNode *n = new MinimaxNode(ginfo->get_board());
+						printw("Heuristic Value for current player: %d              ", n->heur(left_turn));
+       					mvchgat(1, 0, -1, 0, 1, NULL);
+						delete(n); n = NULL;
 					}
 					left_turn ^= true;
 					gwnd->move_to_default(left_turn);
