@@ -63,6 +63,7 @@ void GameScreen::mainloop(void)
 {
 	/* Process keyboard input */
     int ch = 0;
+	int best;
 	bool done = false;
     while(!done)
     {
@@ -74,6 +75,12 @@ void GameScreen::mainloop(void)
 				break;
 			case 'k':
         		this->destroy_window();
+				break;
+			case 'i':
+			case 'I':
+				this->draw();
+				best = ginfo->get_best_move(left_turn);
+				printw("Move to ...: %c:%c               ", (best % 8)  + 'A', '8' - (best / 8) );
 				break;
 			case KEY_MOUSE:
 				if (!this->mousemove(ch))
@@ -107,11 +114,11 @@ void GameScreen::mainloop(void)
 					}
 					else
 					{
-						this->draw();
-						MinimaxNode *n = new MinimaxNode(ginfo->get_board());
-						printw("Heuristic Value for current player: %d              ", n->heur(left_turn));
-       					mvchgat(1, 0, -1, 0, 1, NULL);
-						delete(n); n = NULL;
+						//this->draw();
+						//MinimaxNode *n = new MinimaxNode(ginfo->get_board());
+						//printw("Heuristic Value for current player: %d              ", n->heur(left_turn));
+       					//mvchgat(1, 0, -1, 0, 1, NULL);
+						//delete(n); n = NULL;
 					}
 					left_turn ^= true;
 					gwnd->move_to_default(left_turn);

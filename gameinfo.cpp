@@ -1,7 +1,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <assert.h>
+#include <climits>            /* For SCHAR_MIN */
+#include <unistd.h>	
 #include "gameinfo.h"
+#include "minimax.h"
 
 /*
 ** TODO: Replace 16 & 64 with const
@@ -165,4 +168,27 @@ bool GameInfo::check_stalemate(void) const
 		if (board[i] == 0)
 			return false;
 	return true;
+}
+
+/* TODO: Add randomness when same scores appear */
+const int GameInfo::get_best_move(bool left_player) const
+{
+	MinimaxNode * moves[16];
+	signed char score[16];
+	unsigned char max = 0;
+
+	for(unsigned char i=0; i < 16; ++i)
+	{
+		if(avail_positions[i] == -1)
+			continue;
+		moves[i] = new MinimaxNode(board, avail_positions[i], (unsigned char)(left_player) + 1);
+		score[i] = minimax(moves[i], DEPTH_DEFAULT) * (left_player?-1:1);
+		delete(moves[i]); moves[i] = NULL;
+	}
+
+	for(unsigned char i=0; i < 16; ++i)
+		if (score[i] > score[max])
+			max = i;
+
+	return avail_positions[max];
 }

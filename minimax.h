@@ -11,6 +11,8 @@ class MinimaxNode
     MinimaxNode* next;                 /* Link to next sibling */
 	unsigned char *board;
 	MinimaxNode(unsigned char * const);
+	MinimaxNode(const unsigned char * const, const signed char, const unsigned char);	
+	~MinimaxNode();
 	const signed char heur(bool left_turn = true) const;
 };
 

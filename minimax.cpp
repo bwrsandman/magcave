@@ -2,11 +2,25 @@
 #include <pthread.h>
 #include <assert.h>
 #include <vector>
+#include <string.h>
 #include "minimax.h"
 
 MinimaxNode::MinimaxNode(unsigned char * const board)
    : board(board)
 {
+}
+
+MinimaxNode::MinimaxNode(const unsigned char * const board, const signed char position, const unsigned char player_no)
+   : children(NULL)
+   , board(new unsigned char[64])
+{
+	memcpy(this->board, board, 64);
+	this->board[position] = player_no;
+}
+
+MinimaxNode::~MinimaxNode()
+{
+	delete(board);
 }
 
 /* Minimax function. */

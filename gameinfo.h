@@ -26,6 +26,7 @@ public:
 	unsigned char checkwin(unsigned char, unsigned char) const;
 	bool check_stalemate(void) const;
 	unsigned char *get_board(void){return board;}
+	const int get_best_move(bool) const;
 };
 
 class LineChecker
