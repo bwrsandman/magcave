@@ -20,16 +20,16 @@ inline const signed char get_min(const signed char a, const signed char b)
 }
 
 /* Minimax function. */
-const signed char minimax(const minimaxNode* node, const char depth, signed char ret, signed char other, bool max)
+const signed char minimax(const MinimaxNode* node, const unsigned char depth, signed char ret, signed char other, bool max)
 {
     /* Base Case, leaf node. */
     if (!node->children or !depth)
-        return heur(node);
+        return node->heur();
 
 	const signed char (*min_or_max) (const signed char, const signed char) = 
 		(max)? &get_max : & get_min;
 
-    for (minimaxNode *child = node->children; child != NULL; child = child->next)
+    for (MinimaxNode *child = node->children; child != NULL; child = child->next)
     {
         ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
         if (ret >= other)
