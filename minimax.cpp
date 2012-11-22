@@ -4,15 +4,12 @@
 #include <vector>
 #include <string.h>
 #include "minimax.h"
-
-MinimaxNode::MinimaxNode(unsigned char * const board)
-   : board(board)
-{
-}
+#include "gameinfo.h"
 
 MinimaxNode::MinimaxNode(const unsigned char * const board, const signed char position, const unsigned char player_no)
    : children(NULL)
    , board(new unsigned char[64])
+   , last_pos(position)
 {
 	memcpy(this->board, board, 64);
 	this->board[position] = player_no;
@@ -48,8 +45,14 @@ const signed char minimax(const MinimaxNode* node, const unsigned char depth, si
 /* Heuristic function */
 inline const signed char MinimaxNode::heur(bool left_turn) const
 {
+
+	if (check_win(last_pos, board, left_turn? 1 : 2))
+		return -50;
+
 	std::vector<pthread_t> threads;
 	signed char ret = 0;
+	
+	
 
 	for (unsigned char i = 0; i < 64; ++i)
 	{

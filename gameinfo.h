@@ -16,7 +16,6 @@ private:
 	signed char avail_positions[16];
 	unsigned char board[64];
 	unsigned char player_no:2;
-	mutable pthread_t threads[4];				/* For running 4 line checks in parallel*/
 public:
     GameInfo();
     ~GameInfo(void);
@@ -25,19 +24,21 @@ public:
 	bool move(unsigned char, unsigned char, bool);
 	unsigned char checkwin(unsigned char, unsigned char) const;
 	bool check_stalemate(void) const;
-	unsigned char *get_board(void){return board;}
+	const unsigned char *get_board(void) const{return board;}
 	const int get_best_move(bool) const;
 };
 
 class LineChecker
 {
 public:
-	const GameInfo * const game;
+	const unsigned char * const board;
 	const unsigned char pos:6;					/* Both pos and mul make 1 byte together */
 	const unsigned char mul:2;
-	LineChecker(const GameInfo * const g, const unsigned char p, const unsigned char m);
+	const unsigned char player:2;
+	LineChecker(const unsigned char * const, const unsigned char p, const unsigned char m, const unsigned char);
 };
 
 void* checkline(void*);
+unsigned char check_win(unsigned char, const unsigned char *, const unsigned char);
 
 #endif

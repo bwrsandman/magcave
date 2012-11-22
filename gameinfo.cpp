@@ -11,10 +11,11 @@
 ** Actually have something happen if a player wins or picks an invalid location
 **/
 
-LineChecker::LineChecker(const GameInfo * const g, const unsigned char p, const unsigned char m)
-	: game(g)
+LineChecker::LineChecker(const unsigned char * const board, const unsigned char p, const unsigned char m, const unsigned char player_no)
+	: board(board)
 	, pos(p)
 	, mul(m)
+    , player(player_no)
 {
 }
 
@@ -104,7 +105,7 @@ void *checkline(void *plnchk)
 		if( (lnchk->mul == 0 && position % 8 == 7) || (lnchk->mul == 1 && position > lnchk->pos) ||
 			(lnchk->mul == 2 && position % 8 == 0) || (lnchk->mul == 3 && position % 8 == 7) )
 			break;
-		else if(position < 0 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
+		else if(position < 0 || lnchk->board[position] != lnchk->player)
 			break;
 		else
 			++wincount;
@@ -116,7 +117,7 @@ void *checkline(void *plnchk)
 		if( (lnchk->mul == 0 && position % 8 == 0) || (lnchk->mul == 1 && position < lnchk->pos) ||
 			(lnchk->mul == 2 && position % 8 == 7) || (lnchk->mul == 3 && position % 8 == 0) )
 			break;
-		else if(position > 63 || lnchk->game->get_board_at(position) != lnchk->game->get_player_no())
+		else if(position > 63 || lnchk->board[position] != lnchk->player)
 			break;
 		else
 			++wincount;
@@ -133,7 +134,12 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 	** -----------------------------------------------------------------
 	***/
 
-	unsigned char position = getposition(posx, posy);
+	return check_win(getposition(posx, posy), get_board(), get_player_no());
+}
+
+unsigned char check_win(unsigned char position, const unsigned char * const board, const unsigned char player_no)
+{
+	pthread_t threads[4];				/* For running 4 line checks in parallel*/
 	unsigned char ret = false;
 	int rc;
 
@@ -143,7 +149,7 @@ unsigned char GameInfo::checkwin(unsigned char posx, unsigned char posy) const
 		assert(pthread_create(&threads[i], 
 					          NULL, 
 							  checkline, 
-							  new LineChecker(this, (unsigned char)position, i)) 
+							  new LineChecker(board, (unsigned char)position, i, player_no)) 
 				== 0);
 	}
 
@@ -183,8 +189,11 @@ const int GameInfo::get_best_move(bool left_player) const
 			continue;
 		moves[i] = new MinimaxNode(board, avail_positions[i], (unsigned char)(left_player) + 1);
 		score[i] = minimax(moves[i], DEPTH_DEFAULT) * (left_player?-1:1);
+		//std::cout << char('A' + avail_positions[i] % 8) << ',' << char('8' - avail_positions[i] / 8) << ':' << int(score[i]) << std::endl;
 		delete(moves[i]); moves[i] = NULL;
 	}
+
+	//sleep(5);
 
 	for(unsigned char i=0; i < 16; ++i)
 		if (score[i] > score[max])
