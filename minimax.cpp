@@ -1,6 +1,17 @@
 #include <algorithm>          /* For std::max */
 #include "minimax.h"
 
+inline const signed char get_max(const signed char a, const signed char b)
+{
+		return std::max(a, b);
+}
+
+inline const signed char get_min(const signed char a, const signed char b)
+{
+		return std::min(a, b);
+}
+
+
 /* Minimax function. */
 const signed char minimax(const minimaxNode* node, const char depth, signed char alpha, signed char beta, bool max)
 {
@@ -11,24 +22,27 @@ const signed char minimax(const minimaxNode* node, const char depth, signed char
     }
 
 	signed char ret, other;
+	const signed char (*min_or_max) (const signed char, const signed char);
 	if (max)
 	{
 		ret = alpha;
 		other = beta;
+		min_or_max = &get_max;
 	}
 	else
 	{
 		ret = beta;
 		other = alpha;
+		min_or_max = &get_min;
 	}
 
     /* Recursive Step, using max everytime, but doing *-1 at each step. */
     for (minimaxNode *child = node->children; child != NULL; child = child->next)
     {
 		if (max)
-            ret = std::max(ret, (signed char)(minimax(child, depth-1, ret, other, !max)));
+            ret = min_or_max(ret, (signed char)(minimax(child, depth-1, ret, other, !max)));
 		else
-            ret = std::min(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
+            ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
         if (ret >= other)
            break;
     }
