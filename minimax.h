@@ -31,7 +31,9 @@ public:
 	const unsigned char index:6;
 	const unsigned char mul:2;
 	const unsigned char player:2;
-	GainParams(const unsigned char *, const unsigned char, const unsigned char, const unsigned char);
+	const signed char sign:2;
+	GainParams(const unsigned char *, const unsigned char, const unsigned char, 
+			   const unsigned char, const signed char);
 };
 
 void * count_gain(void *);

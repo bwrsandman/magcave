@@ -1,4 +1,7 @@
 #include <algorithm>          /* For std::max */
+#include <pthread.h>
+#include <assert.h>
+#include <vector>
 #include "minimax.h"
 
 MinimaxNode::MinimaxNode(unsigned char * const board)
@@ -31,7 +34,8 @@ const signed char minimax(const MinimaxNode* node, const unsigned char depth, si
 /* Heuristic function */
 inline const signed char MinimaxNode::heur(bool left_turn) const
 {
-	int points[2] = {0, 0};
+	std::vector<pthread_t> threads;
+	signed char ret = 0;
 
 	for (unsigned char i = 0; i < 64; ++i)
 	{
@@ -41,22 +45,32 @@ inline const signed char MinimaxNode::heur(bool left_turn) const
 		}
 		for (unsigned char j = 0; j < 4; ++j)
 		{
-			signed char * pgain = (signed char *) count_gain((void *) new GainParams(board, i, j, board[i]));
-			points[board[i]-1] += *pgain;
-			delete(pgain); pgain = NULL;
+			pthread_t t;
+			assert(0 == pthread_create(&t, NULL, count_gain, (void *) new GainParams(board, i, j, board[i], (left_turn ^ (board[i] == 2) ? 1 : -1))));
+			threads.push_back(t);
 		}
+	}
+
+	while (!threads.empty())
+	{
+		signed char * pgain;
+	    assert(0 == pthread_join(threads.back(), (void **) &pgain));
+		ret += *pgain;
+		delete(pgain); pgain = NULL;
+		threads.pop_back();
 	}
 	
     /* At this point just retrieve value, optionally sleep. */
-    return (signed char) (points[0]-points[1]) * (left_turn ? 1 : -1);
+    return ret;
 }
 
 GainParams::GainParams(const unsigned char * board, const unsigned char index, 
-		               const unsigned char mul, const unsigned char player)
+		               const unsigned char mul, const unsigned char player, const signed char sign)
 	: board(board)
 	, index(index)
 	, mul(mul)
 	, player(player) 
+	, sign(sign)
 {
 }
 
@@ -92,6 +106,7 @@ void * count_gain(void * vparams)
 		else
 			++gain;
 	}
+	void * ret = (void *) new signed char(params->sign * ((gain < 3)? 0: gain - 3));
 	delete(params);
-	return (void *) new signed char((gain < 3)? 0: gain - 3);
+	return ret;
 }
