@@ -11,18 +11,18 @@ class MinimaxNode
     MinimaxNode* next;                 /* Link to next sibling */
 	unsigned char *board;
 	MinimaxNode(unsigned char * const);
-	const signed char heur(bool left_turn = true) const;
+	const signed char heur(bool=true) const;
 };
 
 const unsigned char DEPTH_DEFAULT = 5;
 
 /* Set alpha to -infinity and beta to +infinity, in this case, 
  * minimum and maximum CHAR values */
-const signed char minimax(const MinimaxNode* n,
-						  const unsigned char depth,
-                          signed char alpha=SCHAR_MIN, 
-                          signed char beta=SCHAR_MAX, 
-                          bool max=true);
+const signed char minimax(const MinimaxNode*,
+						  const unsigned char,
+                          signed char=SCHAR_MIN, 
+                          signed char=SCHAR_MAX, 
+                          bool=true);
 
 class GainParams
 {
