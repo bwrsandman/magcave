@@ -9,6 +9,15 @@ MinimaxNode::MinimaxNode(unsigned char * const board)
 {
 }
 
+MinimaxParams::MinimaxParams(const MinimaxNode* node, const unsigned char depth, signed char ret, signed char other, bool max)
+	: node(node)
+	, depth(depth)
+	, max(max)
+	, ret(ret)
+	, other(other)
+{
+}
+
 inline const signed char get_max(const signed char a, const signed char b)
 {
 	return std::max(a, b);
@@ -20,22 +29,29 @@ inline const signed char get_min(const signed char a, const signed char b)
 }
 
 /* Minimax function. */
-const signed char minimax(const MinimaxNode* node, const unsigned char depth, signed char ret, signed char other, bool max)
+signed char * minimax(MinimaxParams *vparams)
 {
+	MinimaxParams params = *vparams;
+	delete(vparams); vparams = NULL;
+	signed char ret = params.ret;
     /* Base Case, leaf node. */
-    if (!node->children or !depth)
-        return node->heur();
+    if (!params.node->children or !params.depth)
+        return new (signed char)(params.node->heur());
 
 	const signed char (*min_or_max) (const signed char, const signed char) = 
-		(max)? &get_max : & get_min;
+		(params.max)? &get_max : & get_min;
 
-    for (MinimaxNode *child = node->children; child != NULL; child = child->next)
+    for (MinimaxNode *child = params.node->children; child != NULL; child = child->next)
     {
-        ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
-        if (ret >= other)
+		signed char * p;
+        ret = min_or_max(params.ret, (signed char)(*(p=minimax(
+							new MinimaxParams(child, params.depth-1, 
+								params.other, ret, !params.max)))));
+		delete p;
+        if (ret >= params.other)
            break;
     }
-	return ret;
+	return new (signed char)(ret);
 }
 
 /* Heuristic function */
