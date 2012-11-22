@@ -9,27 +9,30 @@ const signed char minimax(const minimaxNode* node, const char depth, signed char
     {
         return heur(node);
     }
+
+	signed char ret, other;
+	if (max)
+	{
+		ret = alpha;
+		other = beta;
+	}
+	else
+	{
+		ret = beta;
+		other = alpha;
+	}
+
     /* Recursive Step, using max everytime, but doing *-1 at each step. */
-    if (max)
+    for (minimaxNode *child = node->children; child != NULL; child = child->next)
     {
-        for (minimaxNode *child = node->children; child != NULL; child = child->next)
-        {
-            alpha = std::max(alpha, (signed char)(minimax(child, depth-1, alpha, beta, !max)));
-            if (beta <= alpha)
-                break;
-        }
-        return alpha;
+		if (max)
+            ret = std::max(ret, (signed char)(minimax(child, depth-1, ret, other, !max)));
+		else
+            ret = std::min(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
+        if (ret >= other)
+           break;
     }
-    else
-    {
-        for (minimaxNode *child = node->children; child != NULL; child = child->next)
-        {
-            beta = std::min(beta, (signed char)(minimax(child, depth-1, alpha, beta, !max)));
-            if (alpha <= beta)
-                break;
-        }
-        return beta;
-    }
+	return ret;
 }
 
 /* Heuristic function */
