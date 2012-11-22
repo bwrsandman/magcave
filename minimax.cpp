@@ -23,26 +23,18 @@ const signed char minimax(const minimaxNode* node, const char depth, signed char
 
 	signed char ret, other;
 	const signed char (*min_or_max) (const signed char, const signed char);
-	if (max)
-	{
 		ret = alpha;
 		other = beta;
+
+	if (max)
 		min_or_max = &get_max;
-	}
 	else
-	{
-		ret = beta;
-		other = alpha;
 		min_or_max = &get_min;
-	}
 
     /* Recursive Step, using max everytime, but doing *-1 at each step. */
     for (minimaxNode *child = node->children; child != NULL; child = child->next)
     {
-		if (max)
-            ret = min_or_max(ret, (signed char)(minimax(child, depth-1, ret, other, !max)));
-		else
-            ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
+        ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
         if (ret >= other)
            break;
     }
