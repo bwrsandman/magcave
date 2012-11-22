@@ -13,25 +13,15 @@ inline const signed char get_min(const signed char a, const signed char b)
 
 
 /* Minimax function. */
-const signed char minimax(const minimaxNode* node, const char depth, signed char alpha, signed char beta, bool max)
+const signed char minimax(const minimaxNode* node, const char depth, signed char ret, signed char other, bool max)
 {
     /* Base Case, leaf node. */
     if (!node->children or !depth)
-    {
         return heur(node);
-    }
 
-	signed char ret, other;
-	const signed char (*min_or_max) (const signed char, const signed char);
-		ret = alpha;
-		other = beta;
+	const signed char (*min_or_max) (const signed char, const signed char) = 
+		(max)? &get_max : & get_min;
 
-	if (max)
-		min_or_max = &get_max;
-	else
-		min_or_max = &get_min;
-
-    /* Recursive Step, using max everytime, but doing *-1 at each step. */
     for (minimaxNode *child = node->children; child != NULL; child = child->next)
     {
         ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
