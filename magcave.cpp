@@ -11,6 +11,9 @@ int main(int argc, char * argv[])
     /* Load minimax tree from xml file. */
     const minimaxNode* n = readxmltree(xmlfilename);
     /* Perform minimax, print result. */
-    std::cout << int(minimax(n, depth)) << std::endl;
+	MinimaxParams *p;
+	signed char *pp;
+    std::cout << int(*(pp=minimax(p=(new MinimaxParams(n, depth))))) << std::endl;
+	delete(p);
     return 0;
 }

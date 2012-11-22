@@ -13,11 +13,19 @@ struct minimaxNode
 
 const char DEPTH_DEFAULT = 5;
 
+class MinimaxParams
+{
+public:
+	const minimaxNode * node;
+	const unsigned char depth:7;
+	bool max:1;
+	const signed char ret;
+	const signed char other;
+	MinimaxParams(const minimaxNode*, const unsigned char, signed char=SCHAR_MIN, signed char=SCHAR_MAX, bool=true);
+};
+
 inline const signed char heur(const minimaxNode* n);
 /* Set alpha to -infinity and beta to +infinity, in this case, 
  * minimum and maximum CHAR values */
-const signed char minimax(const minimaxNode* n, const char depth, 
-                          signed char alpha=SCHAR_MIN, 
-                          signed char beta=SCHAR_MAX, 
-                          bool max=true);
+signed char * minimax(MinimaxParams *);
 #endif
