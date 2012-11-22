@@ -13,7 +13,7 @@ void * get_min(void * p)
 
 
 /* Minimax function. */
-const signed char minimax(const MinimaxNode* node, const unsigned char depth, signed char ret, signed char other, bool max)
+const signed char minimax(const minimaxNode* node, const unsigned char depth, signed char ret, signed char other, bool max)
 {
     /* Base Case, leaf node. */
     if (!node->children or !depth)
