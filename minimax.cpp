@@ -9,14 +9,14 @@ MinimaxNode::MinimaxNode(unsigned char * const board)
 {
 }
 
-inline const signed char get_max(const signed char a, const signed char b)
+void * get_max(void * p)
 {
-	return std::max(a, b);
+	return new (signed char)(std::max(((const signed char*)p)[0], ((const signed char*)p)[1]));
 }
 
-inline const signed char get_min(const signed char a, const signed char b)
+void * get_min(void * p)
 {
-		return std::min(a, b);
+	return new (signed char)(std::min(((const signed char*)p)[0], ((const signed char*)p)[1]));
 }
 
 /* Minimax function. */
@@ -26,12 +26,15 @@ const signed char minimax(const MinimaxNode* node, const unsigned char depth, si
     if (!node->children or !depth)
         return node->heur();
 
-	const signed char (*min_or_max) (const signed char, const signed char) = 
-		(max)? &get_max : & get_min;
-
+	void * (*min_or_max) (void *) = 
+		(max)? &get_max : &get_min;
+	
     for (MinimaxNode *child = node->children; child != NULL; child = child->next)
     {
-        ret = min_or_max(ret, (signed char)(minimax(child, depth-1, other, ret, !max)));
+		const signed char p[2] = {ret, (signed char)(minimax(child, depth-1, other, ret, !max))};
+        const signed char *pret = (const signed char *)min_or_max((void *)p);
+		ret = *pret;
+		delete(pret);
         if (ret >= other)
            break;
     }
