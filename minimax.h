@@ -23,5 +23,17 @@ const signed char minimax(const MinimaxNode* n,
                           signed char alpha=SCHAR_MIN, 
                           signed char beta=SCHAR_MAX, 
                           bool max=true);
-inline signed char count_gain(const unsigned char, const unsigned char * const, const unsigned char, const unsigned char);
+
+class GainParams
+{
+public:
+   	const unsigned char * const board; 
+	const unsigned char index:6;
+	const unsigned char mul:2;
+	const unsigned char player:2;
+	GainParams(const unsigned char *, const unsigned char, const unsigned char, const unsigned char);
+};
+
+void * count_gain(void *);
+
 #endif
