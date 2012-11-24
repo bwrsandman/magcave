@@ -22,6 +22,7 @@ public:
     const unsigned char get_board_at(unsigned char i)const {return board[i];}
 	const unsigned char get_player_no() const     {return player_no;}
 	bool move(unsigned char, unsigned char, bool);
+	bool move(unsigned char p, bool b){return move(p % 8, p / 8, b);}
 	unsigned char checkwin(unsigned char, unsigned char) const;
 	bool check_stalemate(void) const;
 	const unsigned char *get_board(void) const{return board;}

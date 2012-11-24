@@ -80,7 +80,8 @@ void GameScreen::mainloop(void)
 			case 'I':
 				this->draw();
 				best = ginfo->get_best_move(left_turn);
-				printw("Move to ...: %c:%c               ", (best % 8)  + 'A', '8' - (best / 8) );
+				if(gwnd->move_to(best) && ginfo->move(gwnd->get_x(), gwnd->get_y(), left_turn))
+	                done = endturn();
 				break;
 			case KEY_MOUSE:
 				if (!this->mousemove(ch))
@@ -311,17 +312,24 @@ bool GameWindow::mousemove(int ch)
 	int play_x = (event.x + 1 - hpad - 5) / hscale;
 	int play_y = (event.y + 1 - vpad - 3) / vscale;
 
-	if(play_x < 0 || play_y < 0 || play_x >= width || play_y >= height)
+	if ((event.bstate & BUTTON1_CLICKED || event.bstate & BUTTON1_DOUBLE_CLICKED) 
+			&& !move_to(play_x, play_y))
 		return false;
 
-	/* Move cursor */
-	if(event.bstate & BUTTON1_CLICKED || event.bstate & BUTTON1_DOUBLE_CLICKED)
-	{
-		cur_x = play_x;
-		cur_y = play_y;
-	}
-	
 	/* Place move */
 	return event.bstate & BUTTON1_DOUBLE_CLICKED;
 
 }
+
+bool GameWindow::move_to(int x, int y)
+{
+	if(x < 0 || y < 0 || x >= width || y >= height)
+		return false;
+
+	cur_x = x;
+	cur_y = y;
+
+	return true;
+}
+
+

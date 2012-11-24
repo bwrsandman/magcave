@@ -26,6 +26,8 @@ public:
     ~GameWindow(void);
     void draw(const GameInfo * const);
 	void movecur(int);
+    bool move_to(int a){return move_to(a % 8, a / 8);}
+	bool move_to(int, int);
 	bool mousemove(int);
 	void move_to_default(bool);
 	const int get_x(){return cur_x;}
