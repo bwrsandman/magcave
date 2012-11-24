@@ -88,40 +88,7 @@ void GameScreen::mainloop(void)
 			case '\n':
 				if(ginfo->move(gwnd->get_x(), gwnd->get_y(), left_turn))
 				{
-					if ((ch = ginfo->checkwin(gwnd->get_x(), gwnd->get_y())))
-					{
-						this->draw();
-						move(1,2);
-						printw("%s player's has won by %s!    ", PLAYER_LABELS[!left_turn&1], WIN_LABELS[ch]);
-        				mvchgat(1, 0, -1, 0, 1, NULL);
-						move(2,2);
-						printw("Press any key to continue...");
-       					mvchgat(2, 0, -1, 0, 1, NULL);
-						ch = getch();
-						done = true;
-					}
-					else if (ginfo->check_stalemate())
-					{
-						this->draw();
-						move(1,2);
-						printw("STALEMATE              ");
-       					mvchgat(1, 0, -1, 0, 1, NULL);
-						move(2,2);
-						printw("Press any key to continue...");
-       					mvchgat(2, 0, -1, 0, 1, NULL);
-						ch = getch();
-						done = true;
-					}
-					else
-					{
-						//this->draw();
-						//MinimaxNode *n = new MinimaxNode(ginfo->get_board());
-						//printw("Heuristic Value for current player: %d              ", n->heur(left_turn));
-       					//mvchgat(1, 0, -1, 0, 1, NULL);
-						//delete(n); n = NULL;
-					}
-					left_turn ^= true;
-					gwnd->move_to_default(left_turn);
+					done = endturn();
 				}
 				else
 				{
@@ -135,6 +102,47 @@ void GameScreen::mainloop(void)
 		}
 		this->draw();
     }
+}
+
+bool GameScreen::endturn(void)
+{
+	bool done = false;
+	int ch;
+	if ((ch = ginfo->checkwin(gwnd->get_x(), gwnd->get_y())))
+	{
+		this->draw();
+		move(1,2);
+		printw("%s player's has won by %s!    ", PLAYER_LABELS[!left_turn&1], WIN_LABELS[ch]);
+   		mvchgat(1, 0, -1, 0, 1, NULL);
+		move(2,2);
+		printw("Press any key to continue...");
+   		mvchgat(2, 0, -1, 0, 1, NULL);
+		ch = getch();
+		done = true;
+	}
+	else if (ginfo->check_stalemate())
+	{
+		this->draw();
+		move(1,2);
+		printw("STALEMATE              ");
+   		mvchgat(1, 0, -1, 0, 1, NULL);
+		move(2,2);
+		printw("Press any key to continue...");
+   		mvchgat(2, 0, -1, 0, 1, NULL);
+		ch = getch();
+		done = true;
+	}
+	else
+	{
+		//this->draw();
+		//MinimaxNode *n = new MinimaxNode(ginfo->get_board());
+		//printw("Heuristic Value for current player: %d              ", n->heur(left_turn));
+   		//mvchgat(1, 0, -1, 0, 1, NULL);
+		//delete(n); n = NULL;
+	}
+	left_turn ^= true;
+	gwnd->move_to_default(left_turn);
+	return done;
 }
 
 void GameScreen::movecur(int ch)

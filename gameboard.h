@@ -52,6 +52,7 @@ public:
     void mainloop(void);
 	void movecur(int);
 	bool mousemove(int);
+	bool endturn(void);
 };
 
 #endif
