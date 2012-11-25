@@ -4,7 +4,6 @@
 #include <climits>            /* For SCHAR_MIN */
 #include <unistd.h>	
 #include "gameinfo.h"
-#include "minimax.h"
 
 /*
 ** TODO: Replace 16 & 64 with const
@@ -187,13 +186,16 @@ const int GameInfo::get_best_move(bool left_player) const
 	{
 		if(avail_positions[i] == -1)
 			continue;
-		moves[i] = new MinimaxNode(board, avail_positions[i], (unsigned char)(left_player) + 1);
-		score[i] = minimax(moves[i], DEPTH_DEFAULT) * (left_player?-1:1);
-		//std::cout << char('A' + avail_positions[i] % 8) << ',' << char('8' - avail_positions[i] / 8) << ':' << int(score[i]) << std::endl;
-		delete(moves[i]); moves[i] = NULL;
+		moves[i] = build_minimax_tree(board, avail_positions[i], (unsigned char)(left_player) + 1);
 	}
 
-	//sleep(5);
+	for(unsigned char i=0; i < 16; ++i)
+	{
+		if(avail_positions[i] == -1)
+			continue;
+		score[i] = minimax(moves[i], DEPTH_DEFAULT) * (left_player?-1:1);
+		delete(moves[i]); moves[i] = NULL;
+	}
 
 	for(unsigned char i=0; i < 16; ++i)
 	{
@@ -204,4 +206,9 @@ const int GameInfo::get_best_move(bool left_player) const
 	}
 
 	return avail_positions[max];
+}
+
+MinimaxNode * build_minimax_tree(const unsigned char * const board, const signed char new_pos, unsigned char player_no)
+{
+	return new MinimaxNode(board, new_pos, player_no);
 }

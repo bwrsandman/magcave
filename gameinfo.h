@@ -1,6 +1,7 @@
 #ifndef GAMEINFO_H
 #define GAMEINFO_H
 
+#include "minimax.h"
 #include <pthread.h>
 
 const unsigned char WIN_BY_HORIZONTAL = 0x1;
@@ -41,5 +42,6 @@ public:
 
 void* checkline(void*);
 unsigned char check_win(unsigned char, const unsigned char *, const unsigned char);
+MinimaxNode * build_minimax_tree(const unsigned char * const, const signed char, unsigned char);
 
 #endif
