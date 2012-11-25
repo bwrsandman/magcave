@@ -12,7 +12,8 @@ MinimaxNode::MinimaxNode(const unsigned char * const board, const signed char po
    , board(new unsigned char[64])
    , last_pos(position)
 {
-	memcpy(this->board, board, 64);
+	if(board)
+		memcpy(this->board, board, 64);
 	this->board[position] = player_no;
 }
 
