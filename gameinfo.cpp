@@ -196,8 +196,12 @@ const int GameInfo::get_best_move(bool left_player) const
 	//sleep(5);
 
 	for(unsigned char i=0; i < 16; ++i)
+	{
+		if(avail_positions[i] == -1)
+			continue;
 		if (score[i] > score[max])
 			max = i;
+	}
 
 	return avail_positions[max];
 }

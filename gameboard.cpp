@@ -82,6 +82,12 @@ void GameScreen::mainloop(void)
 				best = ginfo->get_best_move(left_turn);
 				if(gwnd->move_to(best) && ginfo->move(gwnd->get_x(), gwnd->get_y(), left_turn))
 	                done = endturn();
+				else
+				{
+					move(0,2);
+					printw("Can't move to %c:%c(%d)!                ", 'A' + gwnd->get_x(), '8' - gwnd->get_y(), best);
+   					mvchgat(1, 0, -1, 0, 1, NULL);
+				}
 				break;
 			case KEY_MOUSE:
 				if (!this->mousemove(ch))
