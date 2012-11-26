@@ -6,10 +6,11 @@
 /* Struct of tree of minimax search */
 class MinimaxNode
 {
+    unsigned char board[64];
 	public:
+    const unsigned char * const get_board(){return board;}
     MinimaxNode* children;             /* Link to the first child */
     MinimaxNode* next;                 /* Link to next sibling */
-	unsigned char *board;
 	const unsigned char last_pos:6;
 	MinimaxNode(const unsigned char * const, const signed char, const unsigned char);
 	~MinimaxNode();

@@ -223,14 +223,14 @@ MinimaxNode * build_minimax_tree(const unsigned char * const board,
 		/* Create avail_positions for the children of this node */
 		signed char child_positions[16];
 		memcpy(child_positions, avail_positions, 16);
-		update_avail_list(child_positions, ret->board, index, child_positions[index]);
+		update_avail_list(child_positions, ret->get_board(), index, child_positions[index]);
 
-		MinimaxNode * prev = NULL, * child;
+		MinimaxNode * prev = NULL, * child = NULL;
 		for(unsigned char i=0; i < 16; ++i)
 		{
-			if(avail_positions[i] == -1)
+			if(child_positions[i] == -1)
 				continue;
-			child = build_minimax_tree(ret->board, child_positions, i, player_no ^ 3, depth - 1);
+			child = build_minimax_tree(ret->get_board(), child_positions, i, player_no ^ 3, depth - 1);
 			if(prev == NULL)
 				ret->children = child;
 			else

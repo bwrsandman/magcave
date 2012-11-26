@@ -9,7 +9,6 @@
 MinimaxNode::MinimaxNode(const unsigned char * const board, const signed char position, const unsigned char player_no)
    : children(NULL)
    , next(NULL)
-   , board(new unsigned char[64])
    , last_pos(position)
 {
 	if(board)
@@ -25,7 +24,6 @@ MinimaxNode::~MinimaxNode()
 	if(children)
 		delete children;
 	children = NULL;
-	delete(board);
 }
 
 /* Minimax function. */
