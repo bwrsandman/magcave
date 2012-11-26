@@ -76,10 +76,14 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 	//Take the position:	
 	board[position] = player_no;
 	
-	/* ----------------------
-	** Update available list
-	** ----------------------
-	***/
+	update_avail_list(avail_positions, board, posindex, position);
+	
+	return true;
+}
+
+void update_avail_list(signed char * avail_positions, unsigned char * board, signed char posindex, unsigned char position)
+{
+	/* Update available list */
 	//If a spot to the left or right is available, add it (make sure we are not on edge)
 	if ( (position+1)%8 != 0 && board[position + 1] == 0)
 		avail_positions[posindex] = position + 1;
@@ -87,8 +91,6 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 		avail_positions[posindex] = position - 1;
 	else
 		avail_positions[posindex] = -1;
-	
-	return true;
 }
 
 void *checkline(void *plnchk)
