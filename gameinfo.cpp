@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <climits>            /* For SCHAR_MIN */
 #include <unistd.h>	
+#include <string.h>
 #include "gameinfo.h"
 
 /*
@@ -81,13 +82,13 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 	return true;
 }
 
-void update_avail_list(signed char * avail_positions, unsigned char * board, signed char posindex, unsigned char position)
+void update_avail_list(signed char * avail_positions, const unsigned char * const board, signed char posindex, unsigned char position)
 {
 	/* Update available list */
 	//If a spot to the left or right is available, add it (make sure we are not on edge)
-	if ( (position+1)%8 != 0 && board[position + 1] == 0)
+	if ( (position+1) % 8 != 0 && board[position + 1] == 0)
 		avail_positions[posindex] = position + 1;
-	else if ( (position-1)%8 != 7 && board[position - 1] == 0)
+	else if ( (position-1) % 8 != 7 && board[position - 1] == 0)
 		avail_positions[posindex] = position - 1;
 	else
 		avail_positions[posindex] = -1;
@@ -188,7 +189,7 @@ const int GameInfo::get_best_move(bool left_player) const
 	{
 		if(avail_positions[i] == -1)
 			continue;
-		moves[i] = build_minimax_tree(board, avail_positions[i], (unsigned char)(left_player) + 1);
+		moves[i] = build_minimax_tree(board, avail_positions, i, (unsigned char)(left_player) + 1, 0);
 	}
 
 	for(unsigned char i=0; i < 16; ++i)
@@ -210,7 +211,32 @@ const int GameInfo::get_best_move(bool left_player) const
 	return avail_positions[max];
 }
 
-MinimaxNode * build_minimax_tree(const unsigned char * const board, const signed char new_pos, unsigned char player_no)
+MinimaxNode * build_minimax_tree(const unsigned char * const board, 
+                                 const signed char * const avail_positions, 
+								 const unsigned char index, 
+                                 const unsigned char player_no,
+								 const unsigned char depth)
 {
-	return new MinimaxNode(board, new_pos, player_no);
+	MinimaxNode * ret = new MinimaxNode(board, avail_positions[index], player_no);
+	if (depth > 0)
+	{
+		/* Create avail_positions for the children of this node */
+		signed char child_positions[16];
+		memcpy(child_positions, avail_positions, 16);
+		update_avail_list(child_positions, ret->board, index, child_positions[index]);
+
+		MinimaxNode * prev = NULL, * child;
+		for(unsigned char i=0; i < 16; ++i)
+		{
+			if(avail_positions[i] == -1)
+				continue;
+			child = build_minimax_tree(ret->board, avail_positions, i, player_no ^ 3, depth - 1);
+			if(prev == NULL)
+				ret->children = child;
+			else
+				prev->next = child;
+			prev = child;
+		}
+	}
+	return ret;
 }

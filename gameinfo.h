@@ -42,7 +42,7 @@ public:
 
 void* checkline(void*);
 unsigned char check_win(unsigned char, const unsigned char *, const unsigned char);
-MinimaxNode * build_minimax_tree(const unsigned char * const, const signed char, unsigned char);
-void update_avail_list(signed char *, unsigned char *, signed char, unsigned char);
+MinimaxNode * build_minimax_tree(const unsigned char * const, const signed char * const, const unsigned char, const unsigned char, const unsigned char);
+void update_avail_list(signed char *, const unsigned char * const, signed char, unsigned char);
 
 #endif
