@@ -189,7 +189,7 @@ const int GameInfo::get_best_move(bool left_player) const
 	{
 		if(avail_positions[i] == -1)
 			continue;
-		moves[i] = build_minimax_tree(board, avail_positions, i, (unsigned char)(left_player) + 1, 0);
+		moves[i] = build_minimax_tree(board, avail_positions, i, (unsigned char)(left_player) + 1, 1);
 	}
 
 	for(unsigned char i=0; i < 16; ++i)
@@ -230,7 +230,7 @@ MinimaxNode * build_minimax_tree(const unsigned char * const board,
 		{
 			if(avail_positions[i] == -1)
 				continue;
-			child = build_minimax_tree(ret->board, avail_positions, i, player_no ^ 3, depth - 1);
+			child = build_minimax_tree(ret->board, child_positions, i, player_no ^ 3, depth - 1);
 			if(prev == NULL)
 				ret->children = child;
 			else
