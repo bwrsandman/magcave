@@ -13,7 +13,7 @@ GameScreen::GameScreen(void)
     noecho();                          /* No echoing entered keys            */
 	keypad(scr, TRUE);
 	/* Listen for left click and left double click */
-	mousemask(BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED, NULL); 
+	mousemask(BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED, NULL);
     clear();                           /* Clear screen                       */
 
 	this->ginfo = new GameInfo();      /* Initialize game rules              */
@@ -46,7 +46,7 @@ void GameScreen::draw(void)
 {
     getmaxyx(this->scr, this->height, this->width);
     move(1,2);
-	printw("%s player's turn.    ",PLAYER_LABELS[!left_turn&1]); 
+	printw("%s player's turn.    ",PLAYER_LABELS[!left_turn&1]);
     /* Fill background color */
     for(unsigned int i = 0; i < this->height; ++i)
     {
@@ -164,9 +164,9 @@ bool GameScreen::mousemove(int ch)
 }
 
 GameWindow::GameWindow(unsigned int mx, unsigned int my)
-	: sz_x((width + 1) * hscale + 3) 
+	: sz_x((width + 1) * hscale + 3)
 	, sz_y((height + 1) * vscale + 3)
-	, wnd(newwin(sz_y, sz_x, 
+	, wnd(newwin(sz_y, sz_x,
                  vpad - 1, hpad - 1))
     , max_x(mx)
     , max_y(my)
@@ -189,7 +189,7 @@ void GameWindow::draw(const GameInfo * const ginfo)
     /* TODO: Some sort of centering, maybe use printw */
     unsigned int pos = 0;
     char c = 0;
-	
+
 	/* Draw the played areas */
 	for(int i = 0; i < 64; ++i)
 	{
@@ -198,34 +198,34 @@ void GameWindow::draw(const GameInfo * const ginfo)
 		c = ginfo->get_board_at(i);
 		if (c == 1 || c == 2)
 		{
-			winsch(this->wnd, PLAYER_LABELS[c-1][0]); 
+			winsch(this->wnd, PLAYER_LABELS[c-1][0]);
 		}
 		else
 		{
 			winsch(this->wnd, ' ');
 		}
 	}
-    
+
 	/* 1, 1 avoids overwriting the borders */
     for(int i = 0; i < width; ++i)
     {
         pos = 1 + (i + 1) * hscale;
         c = 'A' + i;
-        mvwdelch(this->wnd, 1, pos); 
+        mvwdelch(this->wnd, 1, pos);
         winsch(this->wnd, c);
-        mvwdelch(this->wnd, (height + 1) * vscale + 1, pos); 
+        mvwdelch(this->wnd, (height + 1) * vscale + 1, pos);
         winsch(this->wnd, c);
     }
     for(int i = 0; i < height; ++i)
     {
         pos = 1 + (i + 1) * vscale;
         c = '0' + height - i;
-        mvwdelch(this->wnd, pos, 1); 
+        mvwdelch(this->wnd, pos, 1);
         winsch(this->wnd, c);
-        mvwdelch(this->wnd, pos, (width + 1) * hscale + 1); 
+        mvwdelch(this->wnd, pos, (width + 1) * hscale + 1);
         winsch(this->wnd, c);
     }
-	
+
 	//Draw lines in window
 	for(int i = 0; i <= height; ++i)
     {
@@ -239,7 +239,7 @@ void GameWindow::draw(const GameInfo * const ginfo)
         wmove(this->wnd, vscale + 1, pos);
 		wvline(this->wnd, '|', (height*vscale));
     }
-	
+
     for(int i = 0; i < this->height * hscale; ++i)
     {
         mvwchgat(this->wnd, i, 0, -1, 0, 2, NULL);
@@ -247,10 +247,10 @@ void GameWindow::draw(const GameInfo * const ginfo)
 
 
     wattron(this->wnd, COLOR_PAIR(2));
-    wattron(this->wnd, A_BOLD); 
+    wattron(this->wnd, A_BOLD);
     box(this->wnd, 0, 0);             /* 0, 0 gives default characters for
                                        * the vertical and horizontal lines  */
-    wattroff(this->wnd, A_BOLD); 
+    wattroff(this->wnd, A_BOLD);
     wattroff(this->wnd, COLOR_PAIR(2));
     this->move();
     this->refresh();
@@ -289,7 +289,7 @@ void GameWindow::movecur(int ch)
 		case KEY_UP:
 		case 'w':
 		case 'W':
-			this->move(0, -1); 
+			this->move(0, -1);
 			break;
 		case KEY_LEFT:
 		case 'a':
@@ -305,7 +305,7 @@ void GameWindow::movecur(int ch)
 		case 'd':
 		case 'D':
 			this->move(1, 0);
-			break;			
+			break;
 	}
 }
 
@@ -318,7 +318,7 @@ bool GameWindow::mousemove(int ch)
 	int play_x = (event.x + 1 - hpad - 5) / hscale;
 	int play_y = (event.y + 1 - vpad - 3) / vscale;
 
-	if ((event.bstate & BUTTON1_CLICKED || event.bstate & BUTTON1_DOUBLE_CLICKED) 
+	if ((event.bstate & BUTTON1_CLICKED || event.bstate & BUTTON1_DOUBLE_CLICKED)
 			&& !move_to(play_x, play_y))
 		return false;
 

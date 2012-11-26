@@ -11,7 +11,7 @@ const unsigned char WIN_BY_BDIAGONAL = 0x4;
 const unsigned char mults[4] = {1, 8, 7, 9};
 
 class GameInfo
-{	
+{
 private:
 	unsigned char getposition(unsigned char x, unsigned char y) const {return x + 8 * y;}
 	signed char avail_positions[16];

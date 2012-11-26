@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <assert.h>
 #include <climits>            /* For SCHAR_MIN */
-#include <unistd.h>	
+#include <unistd.h>
 #include <string.h>
 #include "gameinfo.h"
 
@@ -20,7 +20,7 @@ LineChecker::LineChecker(const unsigned char * const board, const unsigned char 
 }
 
 GameInfo::GameInfo()
-{	
+{
 	//Fill all available starting positions
 	for(unsigned char i = 0; i < 16; ++i)
 	{
@@ -31,10 +31,10 @@ GameInfo::GameInfo()
 		else
 			avail_positions [i] =  7 + 8*(i%8);
 	}
-	
+
 	//Either player 1 or 2
 	player_no = 2;
-	
+
 	for(unsigned char i = 0; i < 64; ++i)
 	{
 		board[i] = 0;
@@ -50,7 +50,7 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 {
 	signed char posindex = -1;
 	unsigned char position = getposition(posx, posy);
-	
+
 	/* ----------------------
 	** Switch to next player
 	** ----------------------
@@ -66,19 +66,19 @@ bool GameInfo::move(unsigned char posx, unsigned char posy, bool left_player)
 		if (position == avail_positions[i])
 		{
 			posindex = i;
-			break;	
-		}		
-	}	
+			break;
+		}
+	}
 	if (posindex==-1)
 	{
 		return false;
 	}
-	
-	//Take the position:	
+
+	//Take the position:
 	board[position] = player_no;
-	
+
 	update_avail_list(avail_positions, board, posindex, position);
-	
+
 	return true;
 }
 
@@ -99,7 +99,7 @@ void *checkline(void *plnchk)
 	LineChecker *lnchk = (LineChecker*) plnchk;
 	char wincount = 1;
 	signed char position = lnchk->pos;
-	
+
 	// Backwards
 	for(char i = 1; i < 5; ++i)
 	{
@@ -148,17 +148,17 @@ unsigned char check_win(unsigned char position, const unsigned char * const boar
 	// Scatter
 	for(unsigned char i = 0; i < 4; ++i)
 	{
-		assert(pthread_create(&threads[i], 
-					          NULL, 
-							  checkline, 
-							  new LineChecker(board, (unsigned char)position, i, player_no)) 
+		assert(pthread_create(&threads[i],
+					          NULL,
+							  checkline,
+							  new LineChecker(board, (unsigned char)position, i, player_no))
 				== 0);
 	}
 
 	// Gather: Check for win
 	for(unsigned char i = 0; i < 4; ++i)
 	{
-		bool* pchk; 
+		bool* pchk;
 		assert(rc = pthread_join(threads[i], (void **) &pchk) == 0);
 		if(*pchk)
 		{
@@ -211,9 +211,9 @@ const int GameInfo::get_best_move(bool left_player) const
 	return avail_positions[max];
 }
 
-MinimaxNode * build_minimax_tree(const unsigned char * const board, 
-                                 const signed char * const avail_positions, 
-								 const unsigned char index, 
+MinimaxNode * build_minimax_tree(const unsigned char * const board,
+                                 const signed char * const avail_positions,
+								 const unsigned char index,
                                  const unsigned char player_no,
 								 const unsigned char depth)
 {

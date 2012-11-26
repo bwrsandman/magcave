@@ -59,8 +59,8 @@ inline const signed char MinimaxNode::heur(bool left_turn) const
 
 	std::vector<pthread_t> threads;
 	signed char ret = 0;
-	
-	
+
+
 
 	for (unsigned char i = 0; i < 64; ++i)
 	{
@@ -84,17 +84,17 @@ inline const signed char MinimaxNode::heur(bool left_turn) const
 		delete(pgain); pgain = NULL;
 		threads.pop_back();
 	}
-	
+
     /* At this point just retrieve value, optionally sleep. */
     return ret;
 }
 
-GainParams::GainParams(const unsigned char * board, const unsigned char index, 
+GainParams::GainParams(const unsigned char * board, const unsigned char index,
 		               const unsigned char mul, const unsigned char player, const signed char sign)
 	: board(board)
 	, index(index)
 	, mul(mul)
-	, player(player) 
+	, player(player)
 	, sign(sign)
 {
 }
@@ -106,7 +106,7 @@ void * count_gain(void * vparams)
 	const unsigned char mults[4] = {1, 8, 7, 9};
 	unsigned char opponent = params->player ^ 0x3;
 	signed char position = params->index;
-	
+
 	// Backwards
 	for(unsigned char i = 1; i < 5; ++i)
 	{
