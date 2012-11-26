@@ -189,14 +189,14 @@ const int GameInfo::get_best_move(bool left_player) const
 	{
 		if(avail_positions[i] == -1)
 			continue;
-		moves[i] = build_minimax_tree(board, avail_positions, i, (unsigned char)(left_player) + 1, 1);
+		moves[i] = build_minimax_tree(board, avail_positions, i, left_player? 1 : 2, 0);
 	}
 
 	for(unsigned char i=0; i < 16; ++i)
 	{
 		if(avail_positions[i] == -1)
 			continue;
-		score[i] = minimax(moves[i], DEPTH_DEFAULT) * (left_player?-1:1);
+		score[i] = minimax(moves[i], DEPTH_DEFAULT, left_player);
 		delete(moves[i]); moves[i] = NULL;
 	}
 

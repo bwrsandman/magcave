@@ -27,23 +27,24 @@ MinimaxNode::~MinimaxNode()
 }
 
 /* Minimax function. */
-const signed char minimax(const MinimaxNode* node, const unsigned char depth, signed char alpha, signed char beta, bool max)
+const signed char minimax(const MinimaxNode* node, const unsigned char depth, bool max, signed char alpha, signed char beta)
 {
+    signed char h = node->heur(max);
     /* Base Case, leaf node. */
-    if (!node->children or !depth)
-        return node->heur();
+    if (!node->children || !depth || h >= 50 || h <= -50)
+        return h;
 
     /* Recursive Step, using max everytime, but doing *-1 at each step. */
     if (max)
     {
         for (MinimaxNode *child = node->children; child != NULL && beta > alpha; child = child->next)
-            alpha = std::max(alpha, (signed char)(minimax(child, depth-1, alpha, beta, !max)));
+            alpha = std::max(alpha, (signed char)(minimax(child, depth-1, !max, alpha, beta)));
         return alpha;
     }
     else
     {
         for (MinimaxNode *child = node->children; child != NULL && alpha > beta; child = child->next)
-            beta = std::min(beta, (signed char)(minimax(child, depth-1, alpha, beta, !max)));
+            beta = std::min(beta, (signed char)(minimax(child, depth-1, !max, alpha, beta)));
         return beta;
     }
 }
@@ -53,12 +54,13 @@ inline const signed char MinimaxNode::heur(bool left_turn) const
 {
 
 	if (check_win(last_pos, board, left_turn? 1 : 2))
+		return 50;
+
+	if (check_win(last_pos, board, !left_turn? 1 : 2))
 		return -50;
 
 	std::vector<pthread_t> threads;
 	signed char ret = 0;
-
-
 
 	for (unsigned char i = 0; i < 64; ++i)
 	{
