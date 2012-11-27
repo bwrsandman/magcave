@@ -26,8 +26,15 @@ MinimaxNode::~MinimaxNode()
 	children = NULL;
 }
 
+const signed char minimax(const MinimaxNode* a,
+						  const unsigned char b,
+						  bool c)
+{
+    return _minimax(a, b, c, SCHAR_MIN, SCHAR_MAX);
+}
+
 /* Minimax function. */
-const signed char minimax(const MinimaxNode* node, const unsigned char depth, bool max, signed char alpha, signed char beta)
+const signed char _minimax(const MinimaxNode* node, const unsigned char depth, bool max, signed char alpha, signed char beta)
 {
     signed char h = node->heur(max);
     /* Base Case, leaf node. */
@@ -37,15 +44,23 @@ const signed char minimax(const MinimaxNode* node, const unsigned char depth, bo
     /* Recursive Step, using max everytime, but doing *-1 at each step. */
     if (max)
     {
-        for (MinimaxNode *child = node->children; child != NULL && beta > alpha; child = child->next)
-            alpha = std::max(alpha, (signed char)(minimax(child, depth-1, !max, alpha, beta)));
-        return alpha;
+        for (MinimaxNode *child = node->children; child != NULL; child = child->next)
+        {
+            alpha = std::max(alpha, (signed char)(_minimax(child, depth-1, !max, alpha, beta)));
+            if(alpha >= beta)
+                break;
+        }
+        return alpha - 2;
     }
     else
     {
-        for (MinimaxNode *child = node->children; child != NULL && alpha > beta; child = child->next)
-            beta = std::min(beta, (signed char)(minimax(child, depth-1, !max, alpha, beta)));
-        return beta;
+        for (MinimaxNode *child = node->children; child != NULL; child = child->next)
+        {
+            beta = std::min(beta, (signed char)(_minimax(child, depth-1, !max, alpha, beta)));
+            if(alpha >= beta)
+                break;
+        }
+        return beta + 2;
     }
 }
 
@@ -54,10 +69,10 @@ inline const signed char MinimaxNode::heur(bool left_turn) const
 {
 
 	if (check_win(last_pos, board, left_turn? 1 : 2))
-		return 50;
+		return 120;
 
 	if (check_win(last_pos, board, !left_turn? 1 : 2))
-		return -50;
+		return 119;
 
 	std::vector<pthread_t> threads;
 	signed char ret = 0;

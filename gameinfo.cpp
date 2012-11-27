@@ -197,7 +197,7 @@ const int GameInfo::get_best_move(bool left_player) const
 	{
 		if(avail_positions[i] == -1)
 			continue;
-		moves[i] = build_minimax_tree(board, avail_positions, i, left_player? 1 : 2, 0);
+		moves[i] = build_minimax_tree(board, avail_positions, i, left_player? 1 : 2, DEPTH_DEFAULT);
 	}
 
 	for(unsigned char i=0; i < 16; ++i)
