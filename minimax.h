@@ -21,11 +21,15 @@ const unsigned char DEPTH_DEFAULT = 5;
 
 /* Set alpha to -infinity and beta to +infinity, in this case,
  * minimum and maximum CHAR values */
-const signed char minimax(const MinimaxNode*,
+const signed char _minimax(const MinimaxNode*,
 						  const unsigned char,
 						  bool,
-                          signed char=SCHAR_MIN,
-                          signed char=SCHAR_MAX);
+                          signed char,
+                          signed char);
+
+const signed char minimax(const MinimaxNode* a,
+						  const unsigned char b,
+						  bool c);
 
 class GainParams
 {
