@@ -1,8 +1,7 @@
 #include <iostream>
-#include <unistd.h>
 #include <assert.h>
-#include <climits>            /* For SCHAR_MIN */
-#include <unistd.h>
+#include <cstdlib>
+#include <vector>
 #include <string.h>
 #include "gameinfo.h"
 
