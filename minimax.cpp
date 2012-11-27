@@ -60,7 +60,7 @@ const signed char _minimax(const MinimaxNode* node, const unsigned char depth, b
             if(alpha >= beta)
                 break;
         }
-        return beta + 2;
+        return beta;
     }
 }
 
