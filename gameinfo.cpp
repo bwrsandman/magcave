@@ -91,7 +91,15 @@ void update_avail_list(signed char * avail_positions, const unsigned char * cons
 	else if ( (position-1) % 8 != 7 && board[position - 1] == 0)
 		avail_positions[posindex] = position - 1;
 	else
-		avail_positions[posindex] = -1;
+    {
+        if (avail_positions[posindex%8] == avail_positions[posindex%8 + 8])
+        {
+            avail_positions[posindex%8 + 8] = -1;
+            avail_positions[posindex%8] = -1;
+        }
+        else
+            avail_positions[posindex] = -1;
+     }
 }
 
 void *checkline(void *plnchk)
