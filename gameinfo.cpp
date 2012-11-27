@@ -215,6 +215,15 @@ const int GameInfo::get_best_move(bool left_player) const
 		if (score[i] > score[max] || avail_positions[max] == -1)
 			max = i;
 	}
+	std::vector<unsigned char> maxes;
+    for(unsigned char i=0; i < 16; ++i)
+	{
+	    if(score[max] == score[i] && avail_positions[i] != -1)
+            maxes.push_back(i);
+	}
+	/* initialize random seed: */
+    srand ( time(NULL) );
+	max = maxes[rand() % maxes.size()];
 
 	return avail_positions[max];
 }

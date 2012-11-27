@@ -38,7 +38,7 @@ const signed char _minimax(const MinimaxNode* node, const unsigned char depth, b
 {
     signed char h = node->heur(max);
     /* Base Case, leaf node. */
-    if (!node->children || !depth || h >= 50 || h <= -50)
+    if (!node->children || !depth || h >= 100 || h <= -100)
         return h;
 
     /* Recursive Step, using max everytime, but doing *-1 at each step. */

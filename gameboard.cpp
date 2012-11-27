@@ -122,9 +122,9 @@ bool GameScreen::endturn(void)
 		printw("%s player's has won by %s!    ", PLAYER_LABELS[!left_turn&1], WIN_LABELS[ch]);
    		mvchgat(1, 0, -1, 0, 1, NULL);
 		move(2,2);
-		printw("Press any key to continue...");
+		printw("Press ENTER to continue...");
    		mvchgat(2, 0, -1, 0, 1, NULL);
-		ch = getch();
+		while('\n' != getch());
 		done = true;
 	}
 	else if (ginfo->check_stalemate())
@@ -134,9 +134,9 @@ bool GameScreen::endturn(void)
 		printw("STALEMATE              ");
    		mvchgat(1, 0, -1, 0, 1, NULL);
 		move(2,2);
-		printw("Press any key to continue...");
+		printw("Press ENTER to continue...");
    		mvchgat(2, 0, -1, 0, 1, NULL);
-		ch = getch();
+		while('\n' != getch());
 		done = true;
 	}
 	else

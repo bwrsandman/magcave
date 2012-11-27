@@ -17,7 +17,7 @@ class MinimaxNode
 	const signed char heur(bool left_turn = true) const;
 };
 
-const unsigned char DEPTH_DEFAULT = 5;
+const unsigned char DEPTH_DEFAULT = 2;
 
 /* Set alpha to -infinity and beta to +infinity, in this case,
  * minimum and maximum CHAR values */
