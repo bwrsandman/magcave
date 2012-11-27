@@ -8,4 +8,4 @@ LINKER=-lncurses -lpthread
 WARN=-Wall
 
 all: ${SOURCE} ${HEADERS}
-	${CC} ${SOURCE} ${INCLUDE} ${LINKER} ${WARN} ${OUTPUT}
+	${CC} ${SOURCE} ${INCLUDE} ${LINKER} ${WARN} ${OUTPUT} -O3
